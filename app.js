@@ -447,62 +447,7 @@ function App() {
         )
       ),
 
-      // Firebase Sync Panel
-      h("div", { className: "panel" },
-        h("div", { className: "panel-header" },
-          h("div", { className: "panel-header-left" },
-            h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: CloudSVG } }),
-            h("span", { className: "panel-title" }, "雲端同步備份")
-          ),
-          user && h("span", {
-            className: "badge " + (syncStatus === "done" ? "badge-success" : syncStatus === "syncing" ? "badge-warning" : "badge-error"),
-            style: { display: "inline-flex", alignItems: "center" }
-          },
-            syncStatus === "done" ? "✓ 雲端已同步"
-            : syncStatus === "syncing" ? [h("span", { dangerouslySetInnerHTML: { __html: LoadingSVG } }), "正在上傳..."]
-            : "⚠️ 同步失敗"
-          )
-        ),
-        h("div", { className: "panel-body" },
-          !user ? [
-            h("p", { className: "hint-text", style: { display: "flex", alignItems: "flex-start", gap: "6px", margin: "0 0 10px 0", lineHeight: "1.5" } },
-              h("span", { dangerouslySetInnerHTML: { __html: LightbulbSVG }, style: { flexShrink: 0, marginTop: "2px" } }),
-              "登入 Google 教育或個人帳號，即可啟用自動雲端備份，多台電腦即時同步您的黑板與注音設定！"
-            ),
-            h("button", {
-              onClick: handleLogin,
-              className: "btn-primary",
-              style: { width: "100%", background: "linear-gradient(135deg, #4285F4, #357AE8)", border: "none" }
-            }, "🔑 使用 Google 帳號登入")
-          ] : h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" } },
-              h("div", { style: { display: "flex", alignItems: "center", gap: "10px", minWidth: 0 } },
-                user.photoURL ? h("img", {
-                  src: user.photoURL,
-                  alt: "頭像",
-                  style: { width: "32px", height: "32px", borderRadius: "50%", border: "1px solid rgba(0,0,0,0.08)", flexShrink: 0 }
-                }) : h("div", {
-                  style: {
-                    width: "32px", height: "32px", borderRadius: "50%",
-                    background: "var(--accent)", color: "#fff", display: "flex",
-                    alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "bold", flexShrink: 0
-                  }
-                }, user.displayName ? user.displayName.charAt(0) : "師"),
-                h("div", { style: { minWidth: 0 } },
-                  h("div", { style: { fontSize: "13px", fontWeight: "700", color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }, user.displayName || "教職員"),
-                  h("div", { style: { fontSize: "11px", color: "var(--text-dim)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }, user.email)
-                )
-              ),
-              h("button", {
-                onClick: handleLogout,
-                className: "btn-secondary",
-                style: { padding: "6px 12px", fontSize: "11px", flexShrink: 0, background: "rgba(239, 68, 68, 0.08)", color: "#dc2626", borderColor: "rgba(239, 68, 68, 0.15)" },
-                onMouseOver: function(e){ e.target.style.background = "rgba(239,68,68,0.15)"; },
-                onMouseOut: function(e){ e.target.style.background = "rgba(239,68,68,0.08)"; }
-              }, "登出")
-            )
-        )
-      ),
-
+      
       // Date picker
       h("div", { className: "panel" },
         h("div", { className: "panel-header" },
