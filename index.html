@@ -17,8 +17,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
-
 :root {
   --app-bg: #f1f5f9;
   --panel-bg: rgba(255, 255, 255, 0.55);
@@ -30,12 +28,13 @@
   --text: #1f2937;
   --text-dim: #4b5563;
   --radius: 16px;
+  --kai-font: 'DFKai-SB', 'BiaoKai', '標楷體', 'TW-Kai', 'Kaiti TC', 'KaiTi', serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  font-family: var(--kai-font);
   background: var(--app-bg);
   color: var(--text);
   min-height: 100vh;
@@ -149,11 +148,11 @@ body::after {
 }
 .banner-title {
   display: flex; align-items: center; gap: 6px;
-  font-size: 16px; font-weight: 900; color: #fff;
+  font-size: 17px; font-weight: 900; color: #fff;
   text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 .banner-sub {
-  font-size: 11px; color: rgba(255,255,255,0.7);
+  font-size: 12px; color: rgba(255,255,255,0.7);
   margin-top: 2px; letter-spacing: 0.5px;
 }
 .banner-card::after {
@@ -184,14 +183,14 @@ body::after {
 }
 .panel-header-left { display: flex; align-items: center; gap: 6px; }
 .panel-icon { font-size: 14px; }
-.panel-title { font-size: 12px; font-weight: 700; color: var(--text); }
-.panel-sub { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+.panel-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.panel-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
 .panel-body { padding: 10px 12px; }
 
 .badge {
   display: inline-flex; align-items: center; gap: 3px;
   padding: 2px 7px; border-radius: 999px;
-  font-size: 10px; font-weight: 700;
+  font-size: 11px; font-weight: 700;
 }
 .badge-success { background: rgba(16, 185, 129, 0.12); color: #047857; }
 .badge-warning { background: rgba(245, 158, 11, 0.12); color: #b45309; }
@@ -205,26 +204,26 @@ body::after {
 }
 .date-picker-wrap input[type="date"] {
   background: transparent; border: none; outline: none;
-  color: var(--text); font-family: inherit; font-weight: 700; font-size: 13px;
+  color: var(--text); font-family: inherit; font-weight: 700; font-size: 14px;
   padding: 3px 4px; flex: 1; min-width: 0; color-scheme: light;
 }
 .date-nav-btn {
   background: rgba(0, 0, 0, 0.04); border: none;
   color: var(--text-dim); cursor: pointer; padding: 4px 8px; border-radius: 5px;
-  font-size: 12px; transition: all 0.15s;
+  font-size: 12px; transition: all 0.15s; font-family: inherit;
 }
 .date-nav-btn:hover { background: rgba(0, 0, 0, 0.08); color: var(--text); }
-.date-display { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 5px; }
+.date-display { text-align: center; font-size: 12px; color: var(--text-dim); margin-top: 5px; font-family: inherit; }
 
 .input-field {
   width: 100%; padding: 10px 13px; background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 10px;
-  color: var(--text); font-family: inherit; font-size: 14px; line-height: 1.6;
+  color: var(--text); font-family: inherit; font-size: 15px; line-height: 1.6;
   resize: vertical; outline: none; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12); }
-.hint-text { font-size: 10px; color: var(--text-dim); margin-top: 5px; }
+.hint-text { font-size: 11px; color: var(--text-dim); margin-top: 5px; }
 
 /* 自訂排版容器 */
 .custom-panel {
@@ -233,13 +232,13 @@ body::after {
 }
 
 .custom-divider { display: flex; align-items: center; gap: 8px; margin: 8px 0 10px; }
-.custom-divider > span { font-size: 10px; font-weight: 700; color: var(--accent); white-space: nowrap; letter-spacing: 1px; }
+.custom-divider > span { font-size: 11px; font-weight: 700; color: var(--accent); white-space: nowrap; letter-spacing: 1px; }
 .divider-line { flex: 1; height: 1px; background: rgba(2, 132, 199, 0.15); }
 
 .btn-reset {
   width: 100%; margin-top: 8px; padding: 7px; background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 6px; color: var(--text-dim);
-  font-family: inherit; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
 }
 .btn-reset:hover { background: #fff; color: var(--text); border-color: rgba(0, 0, 0, 0.15); }
 
@@ -294,21 +293,22 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   display: flex; justify-content: center; align-items: center;
 }
 
-.info-bar { display: flex; align-items: center; gap: 16px; padding: 6px 4px; }
-.info-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-dim); }
+.info-bar { display: flex; align-items: center; gap: 16px; padding: 6px 4px; font-family: inherit; }
+.info-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-dim); }
 
 .btn-fullscreen {
   position: absolute; top: 10px; right: 10px; z-index: 20;
   background: rgba(0,0,0,0.5); backdrop-filter: blur(6px);
   color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.12);
-  padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
+  padding: 5px 12px; border-radius: 7px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; font-family: inherit;
 }
 .btn-fullscreen:hover { background: rgba(0,0,0,0.7); color: #fff; }
 
 .bb-zhuyin-track {
   display: flex; flex-direction: column; align-items: flex-start;
   font-weight: 700; color: inherit; opacity: 0.9;
+  font-family: inherit;
 }
 .bb-zy-char, .bb-zy-light {
   line-height: 1; position: relative; display: flex; align-items: center; justify-content: center; width: 1em;
@@ -331,6 +331,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    font-family: 'DFKai-SB', 'BiaoKai', '標楷體', 'TW-Kai', 'Kaiti TC', serif !important;
   }
 
   body {
@@ -349,7 +350,6 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
     margin: 0 auto;
   }
 
-  /* 聯絡簿模式：左右 2 欄網格拼版 */
   .print-page-grid-book {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -359,7 +359,6 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
     align-items: start;
   }
 
-  /* 生字本模式：上下 2 列雙份拼版 */
   .print-page-grid-practice {
     display: flex;
     flex-direction: column;
@@ -411,13 +410,14 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   width: 100%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column;
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12), inset 0 1px 1px #fff;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden;
+  font-family: inherit;
 }
 .modal-header {
   padding: 8px 16px; border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex; justify-content: space-between; align-items: center;
 }
-.modal-title { font-size: 13px; font-weight: 900; color: var(--text); }
-.modal-sub { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+.modal-title { font-size: 14px; font-weight: 900; color: var(--text); }
+.modal-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
 .modal-body { padding: 10px 16px; overflow-y: auto; flex: 1; }
 .modal-footer {
   padding: 8px 16px; border-top: 1px solid rgba(0, 0, 0, 0.05);
@@ -428,20 +428,20 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 8px; padding: 4px 6px; display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
-.override-char { font-size: 15px; font-weight: 900; color: var(--text); }
+.override-char { font-size: 16px; font-weight: 900; color: var(--text); }
 .override-input {
-  width: 100%; padding: 3px 4px; font-size: 11px; text-align: center; background: #fff;
+  width: 100%; padding: 3px 4px; font-size: 12px; text-align: center; background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 4px; color: var(--text); font-family: inherit; outline: none;
 }
 .override-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.08); }
 .btn-secondary {
   background: rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.05); border-radius: 6px;
-  color: var(--text-dim); font-size: 11px; font-weight: 700; padding: 6px 10px; cursor: pointer; transition: all 0.15s;
+  color: var(--text-dim); font-size: 12px; font-weight: 700; padding: 6px 10px; cursor: pointer; transition: all 0.15s; font-family: inherit;
 }
 .btn-secondary:hover { background: rgba(0, 0, 0, 0.08); color: var(--text); }
 .btn-primary {
   background: var(--accent); border: none; border-radius: 6px; color: #fff;
-  font-size: 11px; font-weight: 700; padding: 6px 14px; cursor: pointer;
+  font-size: 12px; font-weight: 700; padding: 6px 14px; cursor: pointer; font-family: inherit;
 }
 .btn-primary:hover { background: #0274ae; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -621,6 +621,8 @@ var parseZhuyin = function(str) {
   return { chars: Array.from(charsStr.trim()), tone: tone, type: type };
 };
 
+var KAI_FONT_FAMILY = "'DFKai-SB', 'BiaoKai', '標楷體', 'TW-Kai', 'Kaiti TC', 'KaiTi', serif";
+
 var buildCharHTML = function(char, zy, fs, zyScale, zySpacing, zySqueeze) {
   if (!char) return "";
   var zySize = Math.round(fs * zyScale);
@@ -628,7 +630,7 @@ var buildCharHTML = function(char, zy, fs, zyScale, zySpacing, zySqueeze) {
 
   if (!zy) {
     return '<div style="display:flex;align-items:center;flex-shrink:0;">'
-      + '<div style="font-size:' + fs + 'px;line-height:1;font-weight:900;width:' + fs + 'px;text-align:center;">' + char + '</div>'
+      + '<div style="font-size:' + fs + 'px;line-height:1;font-weight:900;width:' + fs + 'px;text-align:center;font-family:' + KAI_FONT_FAMILY + ';">' + char + '</div>'
       + '<div style="width:' + zyW + 'px;"></div>'
       + '</div>';
   }
@@ -637,15 +639,15 @@ var buildCharHTML = function(char, zy, fs, zyScale, zySpacing, zySqueeze) {
   var slots = p.chars.length + (p.type === "light" ? 1 : 0);
   var gap = Math.max(0.4, slots > 1 ? zySpacing - (slots - 1) * zySqueeze : zySpacing);
   var cells = [];
-  if (p.type === "light") cells.push('<div class="bb-zy-light" style="height:' + gap.toFixed(2) + 'em;">' + p.tone + '</div>');
+  if (p.type === "light") cells.push('<div class="bb-zy-light" style="height:' + gap.toFixed(2) + 'em;font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</div>');
   for (var i = 0; i < p.chars.length; i++) {
-    var tm = (i === p.chars.length - 1 && p.type === "standard") ? '<div class="bb-zy-tone">' + p.tone + '</div>' : "";
-    cells.push('<div class="bb-zy-char" style="height:' + gap.toFixed(2) + 'em;">' + p.chars[i] + tm + '</div>');
+    var tm = (i === p.chars.length - 1 && p.type === "standard") ? '<div class="bb-zy-tone" style="font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</div>' : "";
+    cells.push('<div class="bb-zy-char" style="height:' + gap.toFixed(2) + 'em;font-family:' + KAI_FONT_FAMILY + ';">' + p.chars[i] + tm + '</div>');
   }
 
   return '<div style="display:flex;align-items:center;flex-shrink:0;">'
-    + '<div style="font-size:' + fs + 'px;line-height:1;font-weight:900;width:' + fs + 'px;text-align:center;">' + char + '</div>'
-    + '<div class="bb-zhuyin-track" style="font-size:' + zySize + 'px;width:' + zyW + 'px;margin-left:2px;">' + cells.join("") + '</div>'
+    + '<div style="font-size:' + fs + 'px;line-height:1;font-weight:900;width:' + fs + 'px;text-align:center;font-family:' + KAI_FONT_FAMILY + ';">' + char + '</div>'
+    + '<div class="bb-zhuyin-track" style="font-size:' + zySize + 'px;width:' + zyW + 'px;margin-left:2px;font-family:' + KAI_FONT_FAMILY + ';">' + cells.join("") + '</div>'
     + '</div>';
 };
 
@@ -653,9 +655,9 @@ var DAY_NAMES = ["日","一","二","三","四","五","六"];
 var CN_NUM = ["","一","二","三","四","五","六","七","八","九","十","十一","十二",
   "十三","十四","十五","十六","十七","十八","十九","二十",
   "二十一","二十二","二十三","二十四","二十五","二十六","二十七","二十八","二十九","三十","三十一"];
-var DEFAULT_HOMEWORK = "一、國語\n二、數學\n三、明天穿\n四、運動會補假";
+var DEFAULT_HOMEWORK = "一、國語第十課\n二、數學習作\n三、明天穿運動服\n四、運動會補假";
 
-/* ── 黑板模式 渲染邏輯 ── */
+/* ── 黑板模式 渲染邏輯 (全標楷體) ── */
 var buildBoard = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, overrides) {
   var d = new Date(dateStr + "T00:00:00");
   var month = d.getMonth() + 1, day = d.getDate(), dow = d.getDay();
@@ -676,11 +678,11 @@ var buildBoard = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySque
       if (it.gap) { s += '<div style="height:' + Math.round(cellH * 0.3) + 'px;"></div>'; continue; }
       if (it.vdash) {
         var dashFs = Math.round(fs * 0.55), dashH = Math.round(cellH * 0.55);
-        s += '<div style="height:' + dashH + 'px;display:flex;align-items:center;justify-content:flex-start;"><div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + dashFs + 'px;line-height:1;font-weight:700;width:' + fs + 'px;text-align:center;">︱</div><div style="width:' + zyW + 'px;"></div></div></div>';
+        s += '<div style="height:' + dashH + 'px;display:flex;align-items:center;justify-content:flex-start;"><div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + dashFs + 'px;line-height:1;font-weight:700;width:' + fs + 'px;text-align:center;font-family:' + KAI_FONT_FAMILY + ';">︱</div><div style="width:' + zyW + 'px;"></div></div></div>';
       } else if (it.alpha) {
         var fitFs = Math.round(fs * 0.95 / Math.max(1, it.alpha.length));
         var alphaFs = Math.min(Math.round(fs * 1.15), Math.max(fitFs, Math.round(fs * 0.7)));
-        s += makeCell('<div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + alphaFs + 'px;line-height:1;font-weight:800;width:' + fs + 'px;text-align:center;font-family:Arial,sans-serif;">' + it.alpha + '</div><div style="width:' + zyW + 'px;"></div></div>');
+        s += makeCell('<div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + alphaFs + 'px;line-height:1;font-weight:800;width:' + fs + 'px;text-align:center;font-family:' + KAI_FONT_FAMILY + ';">' + it.alpha + '</div><div style="width:' + zyW + 'px;"></div></div>');
       } else {
         s += makeCell(buildCharHTML(it.ch, it.zy, fs, zyScale, zySpacing, zySqueeze));
       }
@@ -715,11 +717,11 @@ var buildBoard = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySque
     cols.push(makeCol(lItems, false));
   }
   cols.reverse();
-  return '<div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:flex-end;height:100%;overflow:hidden;font-family:\'Noto Sans TC\',serif;">' + cols.join("") + '</div>';
+  return '<div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:flex-end;height:100%;overflow:hidden;font-family:' + KAI_FONT_FAMILY + ';">' + cols.join("") + '</div>';
 };
 
-/* ── 聯絡簿模式 渲染邏輯 ── */
-var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, overrides) {
+/* ── 聯絡簿模式 渲染邏輯 (全標楷體) ── */
+var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, bookHeightCm, overrides) {
   var d = new Date(dateStr + "T00:00:00");
   var month = d.getMonth() + 1, day = d.getDate(), dow = d.getDay();
   
@@ -737,9 +739,9 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
       var it = items[i];
       if (it.gap) { s += '<div style="height:' + Math.round(cellH * 0.3) + 'px;"></div>'; continue; }
       if (it.vdash) {
-        s += makeCell('<div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + Math.round(fs*0.55) + 'px;line-height:1;font-weight:700;width:' + fs + 'px;text-align:center;">︱</div><div style="width:' + zyW + 'px;"></div></div>');
+        s += makeCell('<div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + Math.round(fs*0.55) + 'px;line-height:1;font-weight:700;width:' + fs + 'px;text-align:center;font-family:' + KAI_FONT_FAMILY + ';">︱</div><div style="width:' + zyW + 'px;"></div></div>');
       } else if (it.alpha) {
-        s += makeCell('<div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + Math.round(fs*0.7) + 'px;line-height:1;font-weight:800;width:' + fs + 'px;text-align:center;font-family:Arial,sans-serif;">' + it.alpha + '</div><div style="width:' + zyW + 'px;"></div></div>');
+        s += makeCell('<div style="display:flex;align-items:center;flex-shrink:0;"><div style="font-size:' + Math.round(fs*0.7) + 'px;line-height:1;font-weight:800;width:' + fs + 'px;text-align:center;font-family:' + KAI_FONT_FAMILY + ';">' + it.alpha + '</div><div style="width:' + zyW + 'px;"></div></div>');
       } else {
         s += makeCell(buildCharHTML(it.ch, it.zy, fs, zyScale, zySpacing, zySqueeze));
       }
@@ -784,21 +786,21 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
 
   var totalContentWidth = 'calc(' + (bookColWCm * 7) + 'cm + 64px)';
 
-  return '<div style="background:#fff; border:2px solid ' + lineColor + '; border-radius:4px; display:inline-flex; flex-direction:column; width:' + totalContentWidth + '; max-width:100%; height:100%; color:#2d3748; font-family:\'BiaoKai\', \'Noto Sans TC\', serif; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.06);">'
+  return '<div style="background:#fff; border:2px solid ' + lineColor + '; border-radius:4px; display:inline-flex; flex-direction:column; width:' + totalContentWidth + '; max-width:100%; height:' + bookHeightCm + 'cm; color:#2d3748; font-family:' + KAI_FONT_FAMILY + '; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.06);">'
     + '<div style="display:flex; border-bottom:2px solid ' + lineColor + '; background:#e6f3fd; color:#1e293b;">'
-    +   '<div style="flex:1; text-align:center; font-size:clamp(14px, 1.8vw, 20px); font-weight:900; padding:6px 2px; letter-spacing:2px; display:flex; align-items:center; justify-content:center;">今天的作業和明天帶什麼</div>'
-    +   '<div style="width:64px; border-left:2px solid ' + lineColor + '; text-align:center; padding:6px 0; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; letter-spacing:2px; flex-shrink:0;">日期</div>'
+    +   '<div style="flex:1; text-align:center; font-size:clamp(14px, 1.8vw, 20px); font-weight:900; padding:6px 2px; letter-spacing:2px; display:flex; align-items:center; justify-content:center; font-family:' + KAI_FONT_FAMILY + ';">今天的作業和明天帶什麼</div>'
+    +   '<div style="width:64px; border-left:2px solid ' + lineColor + '; text-align:center; padding:6px 0; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; letter-spacing:2px; flex-shrink:0; font-family:' + KAI_FONT_FAMILY + ';">日期</div>'
     + '</div>'
     + '<div style="display:flex; flex:1; overflow:hidden;">'
     +   '<div style="display:flex; flex-direction:row-reverse; height:100%; overflow:hidden; width:calc(100% - 64px);">' + cols.join("") + '</div>'
-    +   '<div style="width:64px; border-left:2px solid ' + lineColor + '; display:flex; flex-direction:column; padding:8px 0; align-items:center; font-size:16px; font-weight:700; line-height:1.3; color:#1e293b; user-select:none; flex-shrink:0;">'
+    +   '<div style="width:64px; border-left:2px solid ' + lineColor + '; display:flex; flex-direction:column; padding:8px 0; align-items:center; font-size:16px; font-weight:700; line-height:1.3; color:#1e293b; user-select:none; flex-shrink:0; font-family:' + KAI_FONT_FAMILY + ';">'
     +      dateChars.map(function(c){ return c.startsWith('<') ? c : '<div>' + c + '</div>'; }).join("")
     +   '</div>'
     + '</div>'
     + '</div>';
 };
 
-/* ── 生字本模式 渲染邏輯 ── */
+/* ── 生字本模式 渲染邏輯 (全標楷體) ── */
 var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpacing, zySqueeze, onlyZhuyinInSquare, overrides) {
   var lines = hw.split("\n").filter(function(l){ return l.trim(); });
   var totalCols = 6;
@@ -815,17 +817,17 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
     var gap = Math.max(0.4, slots > 1 ? zySpacing - (slots - 1) * zySqueeze : zySpacing);
 
     var zhuyinTracks = [];
-    if (p.type === "light") zhuyinTracks.push('<div style="font-size:' + Math.round(zyItemFs*0.9) + 'px;font-weight:900;color:#0284c7;line-height:' + gap.toFixed(2) + 'em;">' + p.tone + '</div>');
+    if (p.type === "light") zhuyinTracks.push('<div style="font-size:' + Math.round(zyItemFs*0.9) + 'px;font-weight:900;color:#0284c7;line-height:' + gap.toFixed(2) + 'em;font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</div>');
     for (var i = 0; i < p.chars.length; i++) {
-      var tm = (i === p.chars.length - 1 && p.type === "standard") ? '<span style="position:absolute;left:100%;top:-2px;font-size:' + Math.round(zyItemFs*0.8) + 'px;color:#0284c7;">' + p.tone + '</span>' : '';
-      zhuyinTracks.push('<div style="font-size:' + zyItemFs + 'px;font-weight:700;line-height:' + gap.toFixed(2) + 'em;position:relative;">' + p.chars[i] + tm + '</div>');
+      var tm = (i === p.chars.length - 1 && p.type === "standard") ? '<span style="position:absolute;left:100%;top:-2px;font-size:' + Math.round(zyItemFs*0.8) + 'px;color:#0284c7;font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</span>' : '';
+      zhuyinTracks.push('<div style="font-size:' + zyItemFs + 'px;font-weight:700;line-height:' + gap.toFixed(2) + 'em;position:relative;font-family:' + KAI_FONT_FAMILY + ';">' + p.chars[i] + tm + '</div>');
     }
 
     var mainSquareContent = '';
     if (ch) {
       if (onlyZhuyinInSquare) {
         var bigZyFs = Math.round(gridCm * 37.8 * 0.4 * fsMult);
-        mainSquareContent = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + bigZyFs + 'px;font-weight:900;color:#0284c7;line-height:1.1;font-family:\'BpmfGenSenRounded\',sans-serif;">'
+        mainSquareContent = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + bigZyFs + 'px;font-weight:900;color:#0284c7;line-height:1.1;font-family:' + KAI_FONT_FAMILY + ';">'
           + (p.type === "light" ? '<span style="font-size:' + Math.round(bigZyFs*0.6) + 'px;margin-bottom:-4px;">' + p.tone + '</span>' : '')
           + p.chars.map(function(s, idx){
               var tm = (idx === p.chars.length - 1 && p.type === "standard") ? '<span style="position:absolute;left:100%;top:-2px;font-size:' + Math.round(bigZyFs*0.6) + 'px;color:#d97706;">' + p.tone + '</span>' : '';
@@ -833,7 +835,7 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
             }).join("")
           + '</div>';
       } else {
-        mainSquareContent = '<div style="font-size:' + charFs + 'px;font-weight:900;color:#1e293b;font-family:\'BiaoKai\',serif;">' + ch + '</div>';
+        mainSquareContent = '<div style="font-size:' + charFs + 'px;font-weight:900;color:#1e293b;font-family:' + KAI_FONT_FAMILY + ';">' + ch + '</div>';
       }
     }
 
@@ -869,8 +871,8 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
 
   var totalSheetW = 'calc((' + gridCm + 'cm + ' + zyWidthCm + 'cm) * ' + totalCols + ')';
 
-  return '<div style="background:#fff;border:2px solid ' + lineColor + ';border-radius:4px;display:inline-flex;flex-direction:column;width:' + totalSheetW + ';max-width:100%;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.06);">'
-    + '<div style="display:flex;border-bottom:2px solid ' + lineColor + ';background:#e6f3fd;color:#1e293b;padding:8px;font-size:17px;font-weight:900;letter-spacing:3px;justify-content:center;align-items:center;">'
+  return '<div style="background:#fff;border:2px solid ' + lineColor + ';border-radius:4px;display:inline-flex;flex-direction:column;width:' + totalSheetW + ';max-width:100%;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.06);font-family:' + KAI_FONT_FAMILY + ';">'
+    + '<div style="display:flex;border-bottom:2px solid ' + lineColor + ';background:#e6f3fd;color:#1e293b;padding:8px;font-size:17px;font-weight:900;letter-spacing:3px;justify-content:center;align-items:center;font-family:' + KAI_FONT_FAMILY + ';">'
     +   (onlyZhuyinInSquare ? '🐥 國語注音習字本（小一新生專用）' : '📖 國語生字習字簿（田字格）')
     + '</div>'
     + '<div style="display:flex;flex-direction:row-reverse;overflow:hidden;">'
@@ -883,8 +885,8 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
 function Slider(props) {
   return h("div", { style: { marginBottom: "14px" } },
     h("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: "5px" } },
-      h("span", { style: { fontSize: "12px", color: "#94a3b8", fontWeight: 600 } }, props.label),
-      h("span", { style: { fontSize: "12px", color: "#38bdf8", fontWeight: 700,
+      h("span", { style: { fontSize: "13px", color: "#94a3b8", fontWeight: 600 } }, props.label),
+      h("span", { style: { fontSize: "13px", color: "#38bdf8", fontWeight: 700,
         background: "rgba(56,189,248,0.1)", padding: "1px 8px", borderRadius: "6px" } }, props.display)
     ),
     h("input", {
@@ -918,7 +920,7 @@ var PrinterSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 /* ─── React App ─── */
 function App() {
   var bbRef  = useRef(null);
-  var _vm = useState("practice");      var viewMode = _vm[0], setViewMode = _vm[1]; 
+  var _vm = useState("book");          var viewMode = _vm[0], setViewMode = _vm[1]; 
   var _d = useState(getTodayStr());    var curDate = _d[0], setDate = _d[1];
   var _f = useState(false);            var fullsc  = _f[0], setFullsc = _f[1];
   var _p = useState(isPinyinReady());  var pyReady = _p[0], setPyReady = _p[1];
@@ -928,11 +930,14 @@ function App() {
 
   var _fm = useState(1.0);    var fsMult    = _fm[0], setFsMult    = _fm[1];
   var _ch = useState(1.55);   var cellHMult = _ch[0], setCellHMult = _ch[1];
-  var _zs = useState(0.35);   var zyScale   = _zs[0], setZyScale   = _zs[1];
+  var _zs = useState(0.60);   var zyScale   = _zs[0], setZyScale   = _zs[1];
   var _zp = useState(1.1);    var zySpacing = _zp[0], setZySpacing = _zp[1];
   var _zq = useState(0.1);    var zySqueeze = _zq[0], setZySqueeze = _zq[1];
   var _cg = useState(0.18);   var colGapMult= _cg[0], setColGapMult= _cg[1];
+  
   var _bw = useState(1.7);    var bookColWCm= _bw[0], setBookColWCm= _bw[1];
+  var _bh = useState(8.5);    var bookHeightCm = _bh[0], setBookHeightCm = _bh[1];
+  
   var _pc = useState(6);      var printCopies=_pc[0], setPrintCopies=_pc[1];
   var _oz = useState(false);  var onlyZhuyinInSquare=_oz[0], setOnlyZhuyinInSquare=_oz[1];
 
@@ -1039,8 +1044,8 @@ function App() {
 
   var singleBookHTML = useMemo(function() {
     if (!pyReady) return '';
-    return buildBook(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, charOverrides);
-  }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, charOverrides]);
+    return buildBook(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, bookHeightCm, charOverrides);
+  }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, bookHeightCm, charOverrides]);
 
   var singlePracticeHTML = useMemo(function() {
     if (!pyReady) return '';
@@ -1048,7 +1053,7 @@ function App() {
   }, [todayHW, pyReady, tick, practiceGridSizeCm, practiceZyWidthCm, fsMult, zyScale, zySpacing, zySqueeze, onlyZhuyinInSquare, charOverrides]);
 
   var boardHTML = useMemo(function() {
-    if (!pyReady) return '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(100,100,100,0.8);font-size:18px;font-family:serif;">注音引擎載入中...</div>';
+    if (!pyReady) return '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(100,100,100,0.8);font-size:18px;font-family:' + KAI_FONT_FAMILY + ';">注音引擎載入中...</div>';
     if (viewMode === "book") return singleBookHTML;
     if (viewMode === "practice") return singlePracticeHTML;
     return buildBoard(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, charOverrides);
@@ -1090,19 +1095,18 @@ function App() {
             h("div", { style: { display: "flex", gap: "4px", background: "rgba(0,0,0,0.05)", padding: "4px", borderRadius: "8px" } },
               h("button", {
                 onClick: function() { setViewMode("blackboard"); },
-                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "blackboard" ? "#fff" : "transparent", boxShadow: viewMode === "blackboard" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "11px", color: viewMode === "blackboard" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "blackboard" ? "#fff" : "transparent", boxShadow: viewMode === "blackboard" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "12px", color: viewMode === "blackboard" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s", fontFamily: KAI_FONT_FAMILY }
               }, "黑板"),
               h("button", {
                 onClick: function() { setViewMode("book"); },
-                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "book" ? "#fff" : "transparent", boxShadow: viewMode === "book" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "11px", color: viewMode === "book" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "book" ? "#fff" : "transparent", boxShadow: viewMode === "book" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "12px", color: viewMode === "book" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s", fontFamily: KAI_FONT_FAMILY }
               }, "聯絡簿"),
               h("button", {
                 onClick: function() { setViewMode("practice"); },
-                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "practice" ? "#fff" : "transparent", boxShadow: viewMode === "practice" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "11px", color: viewMode === "practice" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "practice" ? "#fff" : "transparent", boxShadow: viewMode === "practice" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "12px", color: viewMode === "practice" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s", fontFamily: KAI_FONT_FAMILY }
               }, "生字本")
             ),
 
-            // 小一新生模式專屬勾選框
             viewMode === "practice" && h("div", { style: { marginTop: "10px", padding: "8px", background: "rgba(2,132,199,0.08)", borderRadius: "6px", display: "flex", alignItems: "center", gap: "8px" } },
               h("input", {
                 type: "checkbox",
@@ -1111,7 +1115,7 @@ function App() {
                 onChange: function(e) { setOnlyZhuyinInSquare(e.target.checked); },
                 style: { width: "16px", height: "16px", accentColor: "var(--accent)", cursor: "pointer" }
               }),
-              h("label", { htmlFor: "onlyZhuyinCheck", style: { fontSize: "12px", fontWeight: 700, color: "var(--accent)", cursor: "pointer" } },
+              h("label", { htmlFor: "onlyZhuyinCheck", style: { fontSize: "13px", fontWeight: 700, color: "var(--accent)", cursor: "pointer", fontFamily: KAI_FONT_FAMILY } },
                 "🐥 小一新生模式 (大格僅顯示注音)"
               )
             )
@@ -1128,11 +1132,11 @@ function App() {
           ),
           h("div", { className: "panel-body", style: { display: "flex", flexDirection: "column", gap: "10px" } },
             viewMode === "book" && h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between" } },
-              h("span", { style: { fontSize: "12px", color: "var(--text-dim)", fontWeight: 600 } }, "A4 拼版規格："),
+              h("span", { style: { fontSize: "13px", color: "var(--text-dim)", fontWeight: 600 } }, "A4 拼版規格："),
               h("select", {
                 value: printCopies,
                 onChange: function(e) { setPrintCopies(Number(e.target.value)); },
-                style: { padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 700, outline: "none", color: "var(--text)" }
+                style: { padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 700, outline: "none", color: "var(--text)", fontFamily: KAI_FONT_FAMILY }
               },
                 h("option", { value: 4 }, "4 份 (2×2 左右兩欄)"),
                 h("option", { value: 6 }, "6 份 (2×3 左右兩欄)")
@@ -1141,7 +1145,7 @@ function App() {
             h("button", {
               className: "btn-primary",
               onClick: function() { window.print(); },
-              style: { width: "100%", padding: "8px", fontSize: "13px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }
+              style: { width: "100%", padding: "8px", fontSize: "14px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }
             },
               h("span", { dangerouslySetInnerHTML: { __html: PrinterSVG } }),
               h("span", null, viewMode === "practice" ? "列印生字習字單 (A4 上下 2 份)" : "列印聯絡簿 (A4 雙欄拼版)")
@@ -1170,14 +1174,14 @@ function App() {
           )
         ),
 
-        // Content Textarea
+        // Homework Content
         h("div", { className: "panel" },
           h("div", { className: "panel-header" },
             h("div", { className: "panel-header-left" },
               h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: PencilSVG } }),
               h("span", { className: "panel-title" }, "文字內容")
             ),
-            h("button", { className: "btn-primary", style: { padding: "4px 10px", fontSize: "11px", height: "auto" }, onClick: function() { setShowOverridesModal(true); } }, "進階注音修改")
+            h("button", { className: "btn-primary", style: { padding: "4px 10px", fontSize: "12px", height: "auto" }, onClick: function() { setShowOverridesModal(true); } }, "進階注音修改")
           ),
           h("div", { className: "panel-body" },
             h("textarea", { className: "input-field", value: todayHW, onChange: function(e){updHW(e.target.value);}, rows: 7, placeholder: "每行＝畫面上一直行（欄）" }),
@@ -1205,12 +1209,16 @@ function App() {
             
             viewMode === "book" && h(Slider, { label: "行高 / 字間距", display: cellHMult.toFixed(2) + "×", min: 1.2, max: 2.8, step: 0.05, value: cellHMult, onChange: setCellHMult }),
             viewMode === "book" && h(Slider, { label: "聯絡簿欄位寬度 (公分)", display: Number(bookColWCm).toFixed(1) + " cm", min: 1.0, max: 4.0, step: 0.1, value: bookColWCm, onChange: setBookColWCm }),
+            viewMode === "book" && h(Slider, { label: "聯絡簿高度 (公分)", display: Number(bookHeightCm).toFixed(1) + " cm", min: 5.0, max: 14.0, step: 0.1, value: bookHeightCm, onChange: setBookHeightCm }),
             
             viewMode === "practice" && h(Slider, { label: "田字格正方形邊長 (公分)", display: Number(practiceGridSizeCm).toFixed(1) + " cm", min: 1.2, max: 4.0, step: 0.1, value: practiceGridSizeCm, onChange: setPracticeGridSizeCm }),
             viewMode === "practice" && h(Slider, { label: "注音欄寬度 (公分)", display: Number(practiceZyWidthCm).toFixed(1) + " cm", min: 0.4, max: 2.0, step: 0.1, value: practiceZyWidthCm, onChange: setPracticeZyWidthCm }),
 
             h("div", { className: "custom-divider" }, h("span", null, "注音"), h("div", { className: "divider-line" })),
-            h(Slider, { label: "注音字體大小", display: (zyScale * 100).toFixed(0) + "% 字", min: 0.22, max: 0.52, step: 0.01, value: zyScale, onChange: setZyScale }),
+            
+            // 注音字體大小：最大調整至 80% 字，預設 60% 字
+            h(Slider, { label: "注音字體大小", display: (zyScale * 100).toFixed(0) + "% 字", min: 0.20, max: 0.80, step: 0.01, value: zyScale, onChange: setZyScale }),
+            
             h(Slider, { label: "注音符號間距", display: zySpacing.toFixed(2) + "em", min: 0.5, max: 1.5, step: 0.05, value: zySpacing, onChange: setZySpacing }),
             h(Slider, { label: "多符號擠壓量", display: zySqueeze.toFixed(2), min: 0, max: 0.3, step: 0.01, value: zySqueeze, onChange: setZySqueeze }),
             
@@ -1219,11 +1227,12 @@ function App() {
               onClick: function() { 
                 setFsMult(1.0); 
                 setCellHMult(1.55); 
-                setZyScale(0.35); 
+                setZyScale(0.60);
                 setZySpacing(1.1); 
                 setZySqueeze(0.1); 
                 setColGapMult(0.18); 
                 setBookColWCm(1.7);
+                setBookHeightCm(8.5);
                 setPracticeGridSizeCm(2.2);
                 setPracticeZyWidthCm(0.8);
               } 
@@ -1256,8 +1265,8 @@ function App() {
         // Info bar below
         h("div", { className: "info-bar" },
           h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "字體 " + fs + "px")),
-          h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "注音 " + Math.round(fs * zyScale) + "px")),
-          viewMode === "book" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "欄寬 " + Number(bookColWCm).toFixed(1) + " cm")),
+          h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "注音 " + Math.round(fs * zyScale) + "px (" + Math.round(zyScale * 100) + "%)")),
+          viewMode === "book" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "聯絡簿 " + Number(bookColWCm).toFixed(1) + " × " + Number(bookHeightCm).toFixed(1) + " cm")),
           viewMode === "practice" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "田字格 " + Number(practiceGridSizeCm).toFixed(1) + " cm × " + Number(practiceGridSizeCm).toFixed(1) + " cm")),
           viewMode === "practice" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "注音欄 " + Number(practiceZyWidthCm).toFixed(1) + " cm")),
           h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, boardSize.w + " × " + boardSize.h + " px"))
@@ -1299,7 +1308,7 @@ function App() {
           [0, 1].map(function(idx) {
             return h("div", { key: idx, className: "print-item-box" },
               h("div", {
-                style: { width: "100%", height: "126mm", display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" },
+                style: { width: "100%", display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" },
                 dangerouslySetInnerHTML: { __html: singlePracticeHTML }
               }),
               idx === 0 && h("div", { className: "print-cut-line" })
@@ -1307,14 +1316,14 @@ function App() {
           })
         )
       ) : (
-        // 聯絡簿模式：2x2 或 2x3 雙欄拼版列印
+        // 聯絡簿模式：嚴格遵守自訂公分高度 (bookHeightCm)
         h("div", { className: "print-page-grid-book" },
           Array.from({ length: printCopies }).map(function(_, idx) {
             return h("div", { key: idx, className: "print-item-box" },
               h("div", {
                 style: { 
                   width: "100%", 
-                  height: (printCopies === 6 ? "76mm" : "118mm"), 
+                  height: bookHeightCm + "cm", 
                   display: "flex", 
                   justifyContent: "center", 
                   alignItems: "center", 
