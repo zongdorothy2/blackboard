@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>班級黑板 - 每日課表與作業</title>
-  <meta name="description" content="班級黑板APP：直式注音顯示，快速設定每日課表與回家作業" />
+  <title>班級黑板 - 每日課表、聯絡簿與生字本</title>
+  <meta name="description" content="班級黑板APP：直式注音顯示，快速設定每日課表、回家作業聯絡簿與生字本" />
   
   <!-- External Libraries from CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -226,6 +226,7 @@ body::after {
 .input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12); }
 .hint-text { font-size: 10px; color: var(--text-dim); margin-top: 5px; }
 
+/* 自訂排版容器 */
 .custom-panel {
   border-top: 1px solid rgba(0, 0, 0, 0.04); 
   padding-top: 10px !important;
@@ -275,7 +276,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   outline: none; transform: none !important; box-shadow: none !important;
 }
 
-/* ── 聯絡簿模式容器 (徹底消除外框滾動條) ── */
+/* ── 聯絡簿 / 生字本模式容器 ── */
 .book-view-wrap {
   background-color: transparent;
   position: relative;
@@ -316,7 +317,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   font-size: 0.8em; position: absolute; left: 100%; top: -0.15em; white-space: nowrap;
 }
 
-/* ── 專屬 A4 左右兩欄網格列印預覽 ── */
+/* ── 專屬 A4 列印預覽 ── */
 #print-root {
   display: none;
 }
@@ -325,6 +326,11 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   @page {
     size: A4 portrait;
     margin: 6mm 6mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   body {
@@ -343,14 +349,24 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
     margin: 0 auto;
   }
 
-  /* 左右雙欄網格 */
-  .print-page-grid {
+  /* 聯絡簿模式：左右 2 欄網格拼版 */
+  .print-page-grid-book {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 6mm 6mm;
     width: 100%;
     justify-items: center;
     align-items: start;
+  }
+
+  /* 生字本模式：上下 2 列雙份拼版 */
+  .print-page-grid-practice {
+    display: flex;
+    flex-direction: column;
+    gap: 6mm;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .print-item-box {
@@ -366,19 +382,19 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
 
   .print-cut-line {
     border-bottom: 1.5px dashed #94a3b8;
-    margin-top: 3mm;
+    margin-top: 4mm;
     width: 100%;
     position: relative;
   }
   .print-cut-line::after {
     content: '✂ 裁切線';
     position: absolute;
-    right: 2px;
-    top: -8px;
-    font-size: 8px;
+    right: 4px;
+    top: -9px;
+    font-size: 9px;
     color: #64748b;
     background: #fff;
-    padding: 0 3px;
+    padding: 0 4px;
   }
 }
 
@@ -702,7 +718,7 @@ var buildBoard = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySque
   return '<div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:flex-end;height:100%;overflow:hidden;font-family:\'Noto Sans TC\',serif;">' + cols.join("") + '</div>';
 };
 
-/* ── 聯絡簿模式 渲染邏輯 (徹底無滾動條、乾淨緊湊) ── */
+/* ── 聯絡簿模式 渲染邏輯 ── */
 var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, overrides) {
   var d = new Date(dateStr + "T00:00:00");
   var month = d.getMonth() + 1, day = d.getDate(), dow = d.getDay();
@@ -782,6 +798,87 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
     + '</div>';
 };
 
+/* ── 生字本模式 渲染邏輯 ── */
+var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpacing, zySqueeze, onlyZhuyinInSquare, overrides) {
+  var lines = hw.split("\n").filter(function(l){ return l.trim(); });
+  var totalCols = 6;
+  var rowsPerCol = 5;
+  var lineColor = "#84a7c1";
+  var gridGuide = "#cbd5e1";
+
+  var charFs = Math.round(gridCm * 37.8 * 0.65 * fsMult);
+  var zyItemFs = Math.round(gridCm * 37.8 * 0.22 * zyScale);
+
+  var makePracticeCell = function(ch, zy) {
+    var p = parseZhuyin(zy);
+    var slots = p.chars.length + (p.type === "light" ? 1 : 0);
+    var gap = Math.max(0.4, slots > 1 ? zySpacing - (slots - 1) * zySqueeze : zySpacing);
+
+    var zhuyinTracks = [];
+    if (p.type === "light") zhuyinTracks.push('<div style="font-size:' + Math.round(zyItemFs*0.9) + 'px;font-weight:900;color:#0284c7;line-height:' + gap.toFixed(2) + 'em;">' + p.tone + '</div>');
+    for (var i = 0; i < p.chars.length; i++) {
+      var tm = (i === p.chars.length - 1 && p.type === "standard") ? '<span style="position:absolute;left:100%;top:-2px;font-size:' + Math.round(zyItemFs*0.8) + 'px;color:#0284c7;">' + p.tone + '</span>' : '';
+      zhuyinTracks.push('<div style="font-size:' + zyItemFs + 'px;font-weight:700;line-height:' + gap.toFixed(2) + 'em;position:relative;">' + p.chars[i] + tm + '</div>');
+    }
+
+    var mainSquareContent = '';
+    if (ch) {
+      if (onlyZhuyinInSquare) {
+        var bigZyFs = Math.round(gridCm * 37.8 * 0.4 * fsMult);
+        mainSquareContent = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + bigZyFs + 'px;font-weight:900;color:#0284c7;line-height:1.1;font-family:\'BpmfGenSenRounded\',sans-serif;">'
+          + (p.type === "light" ? '<span style="font-size:' + Math.round(bigZyFs*0.6) + 'px;margin-bottom:-4px;">' + p.tone + '</span>' : '')
+          + p.chars.map(function(s, idx){
+              var tm = (idx === p.chars.length - 1 && p.type === "standard") ? '<span style="position:absolute;left:100%;top:-2px;font-size:' + Math.round(bigZyFs*0.6) + 'px;color:#d97706;">' + p.tone + '</span>' : '';
+              return '<span style="position:relative;">' + s + tm + '</span>';
+            }).join("")
+          + '</div>';
+      } else {
+        mainSquareContent = '<div style="font-size:' + charFs + 'px;font-weight:900;color:#1e293b;font-family:\'BiaoKai\',serif;">' + ch + '</div>';
+      }
+    }
+
+    return '<div style="display:flex;flex-direction:row;height:' + gridCm + 'cm;border-bottom:1px solid ' + lineColor + ';">'
+      +   '<div style="width:' + gridCm + 'cm;height:' + gridCm + 'cm;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(to right, transparent 49.5%, ' + gridGuide + ' 50%, transparent 50.5%), linear-gradient(to bottom, transparent 49.5%, ' + gridGuide + ' 50%, transparent 50.5%);">'
+      +      mainSquareContent
+      +   '</div>'
+      +   '<div style="width:' + zyWidthCm + 'cm;height:' + gridCm + 'cm;flex-shrink:0;border-left:1px solid ' + lineColor + ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:rgba(230,243,253,0.3);">'
+      +      (!onlyZhuyinInSquare && ch ? zhuyinTracks.join("") : '')
+      +   '</div>'
+      + '</div>';
+  };
+
+  var cols = [];
+  for (var colIdx = 0; colIdx < totalCols; colIdx++) {
+    var isLastCol = (colIdx === totalCols - 1);
+    var colChars = [];
+    if (colIdx < lines.length) {
+      colChars = Array.from(lines[colIdx].trim()).filter(function(c){ return /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c); });
+    }
+
+    var cellsHTML = [];
+    for (var r = 0; r < rowsPerCol; r++) {
+      var ch = r < colChars.length ? colChars[r] : "";
+      var zy = ch ? ((overrides && overrides[ch] !== undefined) ? overrides[ch] : getZhuyinForChar(ch)) : "";
+      cellsHTML.push(makePracticeCell(ch, zy));
+    }
+
+    var borderStyle = isLastCol ? '' : ('border-left:2px solid ' + lineColor + ';');
+    var colTotalW = 'calc(' + gridCm + 'cm + ' + zyWidthCm + 'cm)';
+    cols.push('<div style="width:' + colTotalW + ';flex-shrink:0;display:flex;flex-direction:column;height:100%;' + borderStyle + '">' + cellsHTML.join("") + '</div>');
+  }
+
+  var totalSheetW = 'calc((' + gridCm + 'cm + ' + zyWidthCm + 'cm) * ' + totalCols + ')';
+
+  return '<div style="background:#fff;border:2px solid ' + lineColor + ';border-radius:4px;display:inline-flex;flex-direction:column;width:' + totalSheetW + ';max-width:100%;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.06);">'
+    + '<div style="display:flex;border-bottom:2px solid ' + lineColor + ';background:#e6f3fd;color:#1e293b;padding:8px;font-size:17px;font-weight:900;letter-spacing:3px;justify-content:center;align-items:center;">'
+    +   (onlyZhuyinInSquare ? '🐥 國語注音習字本（小一新生專用）' : '📖 國語生字習字簿（田字格）')
+    + '</div>'
+    + '<div style="display:flex;flex-direction:row-reverse;overflow:hidden;">'
+    +   cols.join("")
+    + '</div>'
+    + '</div>';
+};
+
 /* ─── Slider helper ─── */
 function Slider(props) {
   return h("div", { style: { marginBottom: "14px" } },
@@ -821,7 +918,7 @@ var PrinterSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 /* ─── React App ─── */
 function App() {
   var bbRef  = useRef(null);
-  var _vm = useState("book");          var viewMode = _vm[0], setViewMode = _vm[1]; 
+  var _vm = useState("practice");      var viewMode = _vm[0], setViewMode = _vm[1]; 
   var _d = useState(getTodayStr());    var curDate = _d[0], setDate = _d[1];
   var _f = useState(false);            var fullsc  = _f[0], setFullsc = _f[1];
   var _p = useState(isPinyinReady());  var pyReady = _p[0], setPyReady = _p[1];
@@ -836,7 +933,11 @@ function App() {
   var _zq = useState(0.1);    var zySqueeze = _zq[0], setZySqueeze = _zq[1];
   var _cg = useState(0.18);   var colGapMult= _cg[0], setColGapMult= _cg[1];
   var _bw = useState(1.7);    var bookColWCm= _bw[0], setBookColWCm= _bw[1];
-  var _pc = useState(6);      var printCopies=_pc[0], setPrintCopies=_pc[1]; // 預設 6 份 (2x3)
+  var _pc = useState(6);      var printCopies=_pc[0], setPrintCopies=_pc[1];
+  var _oz = useState(false);  var onlyZhuyinInSquare=_oz[0], setOnlyZhuyinInSquare=_oz[1];
+
+  var _pg = useState(2.2);    var practiceGridSizeCm = _pg[0], setPracticeGridSizeCm = _pg[1];
+  var _pz = useState(0.8);    var practiceZyWidthCm  = _pz[0], setPracticeZyWidthCm  = _pz[1];
 
   var loadHW = function() { try { var s = localStorage.getItem("bb_hw2"); return s ? JSON.parse(s) : {}; } catch(e) { return {}; } };
   var _hw = useState(loadHW); var hwDb = _hw[0], setHwDb = _hw[1];
@@ -932,7 +1033,7 @@ function App() {
 
   var updHW = function(txt) { setHwDb(function(p) { var n = JSON.parse(JSON.stringify(p)); n[curDate] = txt; return n; }); };
 
-  var baseFs = viewMode === "book" ? 24 : Math.round(boardSize.w / 1300 * 52);
+  var baseFs = viewMode === "blackboard" ? Math.round(boardSize.w / 1300 * 52) : 24;
   var fs = Math.round(baseFs * fsMult);
   var pad = Math.round(fs * 0.85);
 
@@ -941,13 +1042,17 @@ function App() {
     return buildBook(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, charOverrides);
   }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, charOverrides]);
 
+  var singlePracticeHTML = useMemo(function() {
+    if (!pyReady) return '';
+    return buildPracticeBook(todayHW, practiceGridSizeCm, practiceZyWidthCm, fsMult, zyScale, zySpacing, zySqueeze, onlyZhuyinInSquare, charOverrides);
+  }, [todayHW, pyReady, tick, practiceGridSizeCm, practiceZyWidthCm, fsMult, zyScale, zySpacing, zySqueeze, onlyZhuyinInSquare, charOverrides]);
+
   var boardHTML = useMemo(function() {
     if (!pyReady) return '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(100,100,100,0.8);font-size:18px;font-family:serif;">注音引擎載入中...</div>';
-    if (viewMode === "book") {
-      return singleBookHTML;
-    }
+    if (viewMode === "book") return singleBookHTML;
+    if (viewMode === "practice") return singlePracticeHTML;
     return buildBoard(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, charOverrides);
-  }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, singleBookHTML, charOverrides, viewMode]);
+  }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, singleBookHTML, singlePracticeHTML, charOverrides, viewMode]);
 
   var fmtDate = function(ds) {
     var d = new Date(ds + "T00:00:00");
@@ -969,11 +1074,11 @@ function App() {
               h("span", { dangerouslySetInnerHTML: { __html: ChalkSVG } }),
               h("span", null, "班級黑板")
             ),
-            h("div", { className: "banner-sub" }, "直式注音黑板 • 聯絡簿自動排版")
+            h("div", { className: "banner-sub" }, "黑板 • 聯絡簿 • 生字習字本")
           )
         ),
 
-        // 模式切換 Panel
+        // 模式切換 Panel (三合一)
         h("div", { className: "panel" },
           h("div", { className: "panel-header" },
             h("div", { className: "panel-header-left" },
@@ -982,29 +1087,47 @@ function App() {
             )
           ),
           h("div", { className: "panel-body" },
-            h("div", { style: { display: "flex", gap: "6px", background: "rgba(0,0,0,0.05)", padding: "4px", borderRadius: "8px" } },
+            h("div", { style: { display: "flex", gap: "4px", background: "rgba(0,0,0,0.05)", padding: "4px", borderRadius: "8px" } },
               h("button", {
                 onClick: function() { setViewMode("blackboard"); },
-                style: { flex: 1, padding: "8px", borderRadius: "6px", border: "none", background: viewMode === "blackboard" ? "#fff" : "transparent", boxShadow: viewMode === "blackboard" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, color: viewMode === "blackboard" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
-              }, "黑板模式"),
+                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "blackboard" ? "#fff" : "transparent", boxShadow: viewMode === "blackboard" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "11px", color: viewMode === "blackboard" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+              }, "黑板"),
               h("button", {
                 onClick: function() { setViewMode("book"); },
-                style: { flex: 1, padding: "8px", borderRadius: "6px", border: "none", background: viewMode === "book" ? "#fff" : "transparent", boxShadow: viewMode === "book" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, color: viewMode === "book" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
-              }, "聯絡簿模式")
+                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "book" ? "#fff" : "transparent", boxShadow: viewMode === "book" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "11px", color: viewMode === "book" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+              }, "聯絡簿"),
+              h("button", {
+                onClick: function() { setViewMode("practice"); },
+                style: { flex: 1, padding: "8px 4px", borderRadius: "6px", border: "none", background: viewMode === "practice" ? "#fff" : "transparent", boxShadow: viewMode === "practice" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, fontSize: "11px", color: viewMode === "practice" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+              }, "生字本")
+            ),
+
+            // 小一新生模式專屬勾選框
+            viewMode === "practice" && h("div", { style: { marginTop: "10px", padding: "8px", background: "rgba(2,132,199,0.08)", borderRadius: "6px", display: "flex", alignItems: "center", gap: "8px" } },
+              h("input", {
+                type: "checkbox",
+                id: "onlyZhuyinCheck",
+                checked: onlyZhuyinInSquare,
+                onChange: function(e) { setOnlyZhuyinInSquare(e.target.checked); },
+                style: { width: "16px", height: "16px", accentColor: "var(--accent)", cursor: "pointer" }
+              }),
+              h("label", { htmlFor: "onlyZhuyinCheck", style: { fontSize: "12px", fontWeight: 700, color: "var(--accent)", cursor: "pointer" } },
+                "🐥 小一新生模式 (大格僅顯示注音)"
+              )
             )
           )
         ),
 
-        // 專屬 A4 友善列印 Panel (左右雙欄 2x2 與 2x3)
+        // 專屬 A4 友善列印 Panel
         h("div", { className: "panel" },
           h("div", { className: "panel-header" },
             h("div", { className: "panel-header-left" },
               h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: PrinterSVG } }),
-              h("span", { className: "panel-title" }, "A4 聯絡簿列印 (雙欄)")
+              h("span", { className: "panel-title" }, viewMode === "practice" ? "A4 生字單列印 (上下兩份)" : "A4 聯絡簿列印 (雙欄)")
             )
           ),
           h("div", { className: "panel-body", style: { display: "flex", flexDirection: "column", gap: "10px" } },
-            h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between" } },
+            viewMode === "book" && h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between" } },
               h("span", { style: { fontSize: "12px", color: "var(--text-dim)", fontWeight: 600 } }, "A4 拼版規格："),
               h("select", {
                 value: printCopies,
@@ -1021,7 +1144,7 @@ function App() {
               style: { width: "100%", padding: "8px", fontSize: "13px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }
             },
               h("span", { dangerouslySetInnerHTML: { __html: PrinterSVG } }),
-              h("span", null, "列印聯絡簿 (A4 雙欄拼版)")
+              h("span", null, viewMode === "practice" ? "列印生字習字單 (A4 上下 2 份)" : "列印聯絡簿 (A4 雙欄拼版)")
             )
           )
         ),
@@ -1047,7 +1170,7 @@ function App() {
           )
         ),
 
-        // Homework Content
+        // Content Textarea
         h("div", { className: "panel" },
           h("div", { className: "panel-header" },
             h("div", { className: "panel-header-left" },
@@ -1059,7 +1182,7 @@ function App() {
           h("div", { className: "panel-body" },
             h("textarea", { className: "input-field", value: todayHW, onChange: function(e){updHW(e.target.value);}, rows: 7, placeholder: "每行＝畫面上一直行（欄）" }),
             h("p", { className: "hint-text", style: { display: "flex", alignItems: "center" } },
-              h("span", { dangerouslySetInnerHTML: { __html: LightbulbSVG } }), "換行即換欄，英數字自動橫排"
+              h("span", { dangerouslySetInnerHTML: { __html: LightbulbSVG } }), "換行即換欄，輸入國字即時轉換"
             )
           )
         ),
@@ -1076,11 +1199,16 @@ function App() {
           customMode && h("div", { className: "panel-body custom-panel" },
             h("div", { className: "custom-divider" }, h("span", null, "中文與格線"), h("div", { className: "divider-line" })),
             h(Slider, { label: "字體大小", display: (fsMult * 100).toFixed(0) + "%", min: 0.5, max: 1.8, step: 0.05, value: fsMult, onChange: setFsMult }),
-            h(Slider, { label: "行高 / 字間距", display: cellHMult.toFixed(2) + "×", min: 1.2, max: 2.8, step: 0.05, value: cellHMult, onChange: setCellHMult }),
             
+            viewMode === "blackboard" && h(Slider, { label: "行高 / 字間距", display: cellHMult.toFixed(2) + "×", min: 1.2, max: 2.8, step: 0.05, value: cellHMult, onChange: setCellHMult }),
             viewMode === "blackboard" && h(Slider, { label: "黑板欄間距", display: (colGapMult * 100).toFixed(0) + "%", min: 0, max: 0.5, step: 0.02, value: colGapMult, onChange: setColGapMult }),
+            
+            viewMode === "book" && h(Slider, { label: "行高 / 字間距", display: cellHMult.toFixed(2) + "×", min: 1.2, max: 2.8, step: 0.05, value: cellHMult, onChange: setCellHMult }),
             viewMode === "book" && h(Slider, { label: "聯絡簿欄位寬度 (公分)", display: Number(bookColWCm).toFixed(1) + " cm", min: 1.0, max: 4.0, step: 0.1, value: bookColWCm, onChange: setBookColWCm }),
             
+            viewMode === "practice" && h(Slider, { label: "田字格正方形邊長 (公分)", display: Number(practiceGridSizeCm).toFixed(1) + " cm", min: 1.2, max: 4.0, step: 0.1, value: practiceGridSizeCm, onChange: setPracticeGridSizeCm }),
+            viewMode === "practice" && h(Slider, { label: "注音欄寬度 (公分)", display: Number(practiceZyWidthCm).toFixed(1) + " cm", min: 0.4, max: 2.0, step: 0.1, value: practiceZyWidthCm, onChange: setPracticeZyWidthCm }),
+
             h("div", { className: "custom-divider" }, h("span", null, "注音"), h("div", { className: "divider-line" })),
             h(Slider, { label: "注音字體大小", display: (zyScale * 100).toFixed(0) + "% 字", min: 0.22, max: 0.52, step: 0.01, value: zyScale, onChange: setZyScale }),
             h(Slider, { label: "注音符號間距", display: zySpacing.toFixed(2) + "em", min: 0.5, max: 1.5, step: 0.05, value: zySpacing, onChange: setZySpacing }),
@@ -1095,7 +1223,9 @@ function App() {
                 setZySpacing(1.1); 
                 setZySqueeze(0.1); 
                 setColGapMult(0.18); 
-                setBookColWCm(1.7); 
+                setBookColWCm(1.7);
+                setPracticeGridSizeCm(2.2);
+                setPracticeZyWidthCm(0.8);
               } 
             }, "↺ 恢復預設值")
           )
@@ -1104,15 +1234,15 @@ function App() {
 
       // ── Main Content Area ──
       h("div", { className: "board-wrap" },
-        h("div", { ref: bbRef, className: viewMode === "book" ? "book-view-wrap" : "blackboard-bg", style: { position: "relative", height: "calc(100vh - 65px)" } },
+        h("div", { ref: bbRef, className: viewMode === "blackboard" ? "blackboard-bg" : "book-view-wrap", style: { position: "relative", height: "calc(100vh - 65px)" } },
           h("button", { className: "btn-fullscreen", onClick: toggleFS }, fullsc ? "✕ 退出" : "⛶ 全螢幕"),
           h("div", {
             style: {
-              position: viewMode === "book" ? "static" : "absolute",
-              top: viewMode === "book" ? "auto" : (pad + "px"),
-              left: viewMode === "book" ? "auto" : (pad + "px"),
-              right: viewMode === "book" ? "auto" : (pad + "px"),
-              bottom: viewMode === "book" ? "auto" : (pad + "px"),
+              position: viewMode === "blackboard" ? "absolute" : "static",
+              top: viewMode === "blackboard" ? (pad + "px") : "auto",
+              left: viewMode === "blackboard" ? (pad + "px") : "auto",
+              right: viewMode === "blackboard" ? (pad + "px") : "auto",
+              bottom: viewMode === "blackboard" ? (pad + "px") : "auto",
               height: "100%",
               display: "flex",
               justifyContent: "center",
@@ -1128,6 +1258,8 @@ function App() {
           h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "字體 " + fs + "px")),
           h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "注音 " + Math.round(fs * zyScale) + "px")),
           viewMode === "book" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "欄寬 " + Number(bookColWCm).toFixed(1) + " cm")),
+          viewMode === "practice" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "田字格 " + Number(practiceGridSizeCm).toFixed(1) + " cm × " + Number(practiceGridSizeCm).toFixed(1) + " cm")),
+          viewMode === "practice" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "注音欄 " + Number(practiceZyWidthCm).toFixed(1) + " cm")),
           h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, boardSize.w + " × " + boardSize.h + " px"))
         )
       ),
@@ -1159,25 +1291,41 @@ function App() {
       )
     ),
 
-    // ── 專屬 A4 左右雙欄拼版列印容器 ──
+    // ── 專屬 A4 多合一拼版列印容器 ──
     h("div", { id: "print-root" },
-      h("div", { className: "print-page-grid" },
-        Array.from({ length: printCopies }).map(function(_, idx) {
-          return h("div", { key: idx, className: "print-item-box" },
-            h("div", {
-              style: { 
-                width: "100%", 
-                height: (printCopies === 6 ? "76mm" : "118mm"), 
-                display: "flex", 
-                justifyContent: "center", 
-                alignItems: "center", 
-                overflow: "hidden" 
-              },
-              dangerouslySetInnerHTML: { __html: singleBookHTML }
-            }),
-            h("div", { className: "print-cut-line" })
-          );
-        })
+      viewMode === "practice" ? (
+        // 生字本模式：A4 上下雙份（共 2 份）拼版
+        h("div", { className: "print-page-grid-practice" },
+          [0, 1].map(function(idx) {
+            return h("div", { key: idx, className: "print-item-box" },
+              h("div", {
+                style: { width: "100%", height: "126mm", display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" },
+                dangerouslySetInnerHTML: { __html: singlePracticeHTML }
+              }),
+              idx === 0 && h("div", { className: "print-cut-line" })
+            );
+          })
+        )
+      ) : (
+        // 聯絡簿模式：2x2 或 2x3 雙欄拼版列印
+        h("div", { className: "print-page-grid-book" },
+          Array.from({ length: printCopies }).map(function(_, idx) {
+            return h("div", { key: idx, className: "print-item-box" },
+              h("div", {
+                style: { 
+                  width: "100%", 
+                  height: (printCopies === 6 ? "76mm" : "118mm"), 
+                  display: "flex", 
+                  justifyContent: "center", 
+                  alignItems: "center", 
+                  overflow: "hidden" 
+                },
+                dangerouslySetInnerHTML: { __html: singleBookHTML }
+              }),
+              h("div", { className: "print-cut-line" })
+            );
+          })
+        )
       )
     )
   );
