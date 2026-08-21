@@ -275,7 +275,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   outline: none; transform: none !important; box-shadow: none !important;
 }
 
-/* ── 聯絡簿模式容器 ── */
+/* ── 聯絡簿模式容器 (徹底消除外框滾動條) ── */
 .book-view-wrap {
   background-color: transparent;
   position: relative;
@@ -284,7 +284,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   justify-content: center;
   align-items: flex-start;
   transition: all 0.3s;
-  overflow: auto;
+  overflow: hidden;
   padding: 4px 0;
 }
 .book-view-wrap:fullscreen, .book-view-wrap:-webkit-full-screen {
@@ -316,7 +316,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   font-size: 0.8em; position: absolute; left: 100%; top: -0.15em; white-space: nowrap;
 }
 
-/* ── 專屬列印預覽區域 ── */
+/* ── 專屬 A4 左右兩欄網格列印預覽 ── */
 #print-root {
   display: none;
 }
@@ -324,7 +324,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
 @media print {
   @page {
     size: A4 portrait;
-    margin: 8mm 6mm;
+    margin: 6mm 6mm;
   }
 
   body {
@@ -343,12 +343,14 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
     margin: 0 auto;
   }
 
+  /* 左右雙欄網格 */
   .print-page-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8mm;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6mm 6mm;
     width: 100%;
-    align-items: center;
+    justify-items: center;
+    align-items: start;
   }
 
   .print-item-box {
@@ -356,23 +358,27 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
     break-inside: avoid;
     position: relative;
     box-shadow: none !important;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .print-cut-line {
     border-bottom: 1.5px dashed #94a3b8;
-    margin-top: 4mm;
+    margin-top: 3mm;
     width: 100%;
     position: relative;
   }
   .print-cut-line::after {
     content: '✂ 裁切線';
     position: absolute;
-    right: 4px;
-    top: -9px;
-    font-size: 9px;
+    right: 2px;
+    top: -8px;
+    font-size: 8px;
     color: #64748b;
     background: #fff;
-    padding: 0 4px;
+    padding: 0 3px;
   }
 }
 
@@ -696,7 +702,7 @@ var buildBoard = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySque
   return '<div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:flex-end;height:100%;overflow:hidden;font-family:\'Noto Sans TC\',serif;">' + cols.join("") + '</div>';
 };
 
-/* ── 聯絡簿模式 渲染邏輯 (7 欄依自訂公分寬度緊湊排列，無多餘留白) ── */
+/* ── 聯絡簿模式 渲染邏輯 (徹底無滾動條、乾淨緊湊) ── */
 var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, overrides) {
   var d = new Date(dateStr + "T00:00:00");
   var month = d.getMonth() + 1, day = d.getDate(), dow = d.getDay();
@@ -710,7 +716,7 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
 
   var makeCol = function(items, isLast) {
     var borderStyle = isLast ? '' : ('border-left:1px solid ' + lineColor + ';');
-    var s = '<div style="display:flex;flex-direction:column;align-items:center;width:' + bookColWCm + 'cm;flex-shrink:0;' + borderStyle + 'padding:6px 0;height:100%;overflow:hidden;">';
+    var s = '<div style="display:flex;flex-direction:column;align-items:center;width:' + bookColWCm + 'cm;flex-shrink:0;' + borderStyle + 'padding:4px 0;height:100%;overflow:hidden;">';
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
       if (it.gap) { s += '<div style="height:' + Math.round(cellH * 0.3) + 'px;"></div>'; continue; }
@@ -757,20 +763,19 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
   dateChars.push("月");
   Array.from(CN_NUM[day] || String(day)).forEach(function(c) { dateChars.push(c); });
   dateChars.push("日");
-  dateChars.push("<div style='height:8px;'></div>");
+  dateChars.push("<div style='height:6px;'></div>");
   dateChars.push("星"); dateChars.push("期"); dateChars.push(DAY_NAMES[dow]);
 
-  // 總寬度 = 7 個欄位寬度 + 1 個日期欄寬 (68px)
-  var totalContentWidth = 'calc(' + (bookColWCm * 7) + 'cm + 68px)';
+  var totalContentWidth = 'calc(' + (bookColWCm * 7) + 'cm + 64px)';
 
   return '<div style="background:#fff; border:2px solid ' + lineColor + '; border-radius:4px; display:inline-flex; flex-direction:column; width:' + totalContentWidth + '; max-width:100%; height:100%; color:#2d3748; font-family:\'BiaoKai\', \'Noto Sans TC\', serif; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.06);">'
     + '<div style="display:flex; border-bottom:2px solid ' + lineColor + '; background:#e6f3fd; color:#1e293b;">'
-    +   '<div style="flex:1; text-align:center; font-size:clamp(15px, 2.2vw, 22px); font-weight:900; padding:8px 4px; letter-spacing:3px; display:flex; align-items:center; justify-content:center;">今天的作業和明天帶什麼</div>'
-    +   '<div style="width:68px; border-left:2px solid ' + lineColor + '; text-align:center; padding:8px 0; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center; letter-spacing:2px; flex-shrink:0;">日期</div>'
+    +   '<div style="flex:1; text-align:center; font-size:clamp(14px, 1.8vw, 20px); font-weight:900; padding:6px 2px; letter-spacing:2px; display:flex; align-items:center; justify-content:center;">今天的作業和明天帶什麼</div>'
+    +   '<div style="width:64px; border-left:2px solid ' + lineColor + '; text-align:center; padding:6px 0; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; letter-spacing:2px; flex-shrink:0;">日期</div>'
     + '</div>'
     + '<div style="display:flex; flex:1; overflow:hidden;">'
-    +   '<div style="display:flex; flex-direction:row-reverse; height:100%; overflow-x:auto; width:calc(100% - 68px);">' + cols.join("") + '</div>'
-    +   '<div style="width:68px; border-left:2px solid ' + lineColor + '; display:flex; flex-direction:column; padding:12px 0; align-items:center; font-size:18px; font-weight:700; line-height:1.35; color:#1e293b; user-select:none; flex-shrink:0;">'
+    +   '<div style="display:flex; flex-direction:row-reverse; height:100%; overflow:hidden; width:calc(100% - 64px);">' + cols.join("") + '</div>'
+    +   '<div style="width:64px; border-left:2px solid ' + lineColor + '; display:flex; flex-direction:column; padding:8px 0; align-items:center; font-size:16px; font-weight:700; line-height:1.3; color:#1e293b; user-select:none; flex-shrink:0;">'
     +      dateChars.map(function(c){ return c.startsWith('<') ? c : '<div>' + c + '</div>'; }).join("")
     +   '</div>'
     + '</div>'
@@ -831,7 +836,7 @@ function App() {
   var _zq = useState(0.1);    var zySqueeze = _zq[0], setZySqueeze = _zq[1];
   var _cg = useState(0.18);   var colGapMult= _cg[0], setColGapMult= _cg[1];
   var _bw = useState(1.7);    var bookColWCm= _bw[0], setBookColWCm= _bw[1];
-  var _pc = useState(3);      var printCopies=_pc[0], setPrintCopies=_pc[1];
+  var _pc = useState(6);      var printCopies=_pc[0], setPrintCopies=_pc[1]; // 預設 6 份 (2x3)
 
   var loadHW = function() { try { var s = localStorage.getItem("bb_hw2"); return s ? JSON.parse(s) : {}; } catch(e) { return {}; } };
   var _hw = useState(loadHW); var hwDb = _hw[0], setHwDb = _hw[1];
@@ -990,24 +995,24 @@ function App() {
           )
         ),
 
-        // 專屬 A4 友善列印 Panel
+        // 專屬 A4 友善列印 Panel (左右雙欄 2x2 與 2x3)
         h("div", { className: "panel" },
           h("div", { className: "panel-header" },
             h("div", { className: "panel-header-left" },
               h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: PrinterSVG } }),
-              h("span", { className: "panel-title" }, "A4 聯絡簿列印")
+              h("span", { className: "panel-title" }, "A4 聯絡簿列印 (雙欄)")
             )
           ),
           h("div", { className: "panel-body", style: { display: "flex", flexDirection: "column", gap: "10px" } },
             h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between" } },
-              h("span", { style: { fontSize: "12px", color: "var(--text-dim)", fontWeight: 600 } }, "每頁 A4 份數："),
+              h("span", { style: { fontSize: "12px", color: "var(--text-dim)", fontWeight: 600 } }, "A4 拼版規格："),
               h("select", {
                 value: printCopies,
                 onChange: function(e) { setPrintCopies(Number(e.target.value)); },
                 style: { padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 700, outline: "none", color: "var(--text)" }
               },
-                h("option", { value: 2 }, "2 份 (上下二等分)"),
-                h("option", { value: 3 }, "3 份 (三等分)")
+                h("option", { value: 4 }, "4 份 (2×2 左右兩欄)"),
+                h("option", { value: 6 }, "6 份 (2×3 左右兩欄)")
               )
             ),
             h("button", {
@@ -1016,7 +1021,7 @@ function App() {
               style: { width: "100%", padding: "8px", fontSize: "13px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }
             },
               h("span", { dangerouslySetInnerHTML: { __html: PrinterSVG } }),
-              h("span", null, "列印聯絡簿 (A4 拼版)")
+              h("span", null, "列印聯絡簿 (A4 雙欄拼版)")
             )
           )
         ),
@@ -1154,16 +1159,23 @@ function App() {
       )
     ),
 
-    // ── 專屬 A4 多合一拼版列印容器 ──
+    // ── 專屬 A4 左右雙欄拼版列印容器 ──
     h("div", { id: "print-root" },
       h("div", { className: "print-page-grid" },
         Array.from({ length: printCopies }).map(function(_, idx) {
           return h("div", { key: idx, className: "print-item-box" },
             h("div", {
-              style: { width: "100%", height: (270 / printCopies - 10) + "mm", minHeight: "65mm", display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" },
+              style: { 
+                width: "100%", 
+                height: (printCopies === 6 ? "76mm" : "118mm"), 
+                display: "flex", 
+                justifyContent: "center", 
+                alignItems: "center", 
+                overflow: "hidden" 
+              },
               dangerouslySetInnerHTML: { __html: singleBookHTML }
             }),
-            idx < printCopies - 1 && h("div", { className: "print-cut-line" })
+            h("div", { className: "print-cut-line" })
           );
         })
       )
