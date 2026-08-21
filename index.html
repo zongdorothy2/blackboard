@@ -21,8 +21,8 @@
 
 :root {
   --app-bg: #f1f5f9;
-  --panel-bg: rgba(255, 255, 255, 0.45);
-  --panel-border: rgba(255, 255, 255, 0.6);
+  --panel-bg: rgba(255, 255, 255, 0.55);
+  --panel-border: rgba(255, 255, 255, 0.7);
   --bb-green: #1a3c23;
   --chalk: #fff8dc;
   --accent: #0284c7;
@@ -84,39 +84,60 @@ body::after {
 /* ── Layout ── */
 .app-layout {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 370px 1fr;
   gap: 20px;
   max-width: 1640px;
   margin: 0 auto;
-  padding: 20px;
-  min-height: 100vh;
+  padding: 16px;
+  height: 100vh;
   align-items: start;
+  overflow: hidden;
 }
 
 @media (max-width: 1080px) {
-  .app-layout { grid-template-columns: 1fr; padding: 12px; gap: 14px; }
+  .app-layout { 
+    grid-template-columns: 1fr; 
+    padding: 12px; 
+    gap: 14px; 
+    height: auto; 
+    overflow: auto;
+  }
 }
 
 .sidebar-scroll {
-  display: flex; flex-direction: column; gap: 12px;
-  position: sticky; top: 20px;
-  max-height: calc(100vh - 40px);
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px;
+  height: calc(100vh - 32px);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
-  padding-right: 4px;
+  scrollbar-color: rgba(2, 132, 199, 0.4) rgba(0, 0, 0, 0.05);
+  padding-right: 6px;
+  padding-bottom: 24px;
 }
-.sidebar-scroll::-webkit-scrollbar { width: 6px; }
-.sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 999px; }
+.sidebar-scroll::-webkit-scrollbar { width: 7px; }
+.sidebar-scroll::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.03); border-radius: 999px; }
+.sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(2, 132, 199, 0.35); border-radius: 999px; }
+.sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(2, 132, 199, 0.6); }
 
-.board-wrap { display: flex; flex-direction: column; gap: 10px; position: sticky; top: 20px; }
+.board-wrap { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  height: calc(100vh - 32px);
+  overflow-y: auto;
+  align-items: center;
+  justify-content: flex-start;
+}
 
 .banner-card {
   position: relative;
   background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e293b 100%);
   border-radius: var(--radius);
   overflow: hidden;
-  height: 100px;
+  height: 90px;
+  flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
 }
@@ -124,7 +145,7 @@ body::after {
   position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.1) 80%, transparent 100%);
   display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 10px 12px;
+  padding: 10px 14px;
 }
 .banner-title {
   display: flex; align-items: center; gap: 6px;
@@ -132,8 +153,8 @@ body::after {
   text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 .banner-sub {
-  font-size: 10px; color: rgba(255,255,255,0.7);
-  margin-top: 1px; letter-spacing: 0.5px;
+  font-size: 11px; color: rgba(255,255,255,0.7);
+  margin-top: 2px; letter-spacing: 0.5px;
 }
 .banner-card::after {
   content: '';
@@ -148,8 +169,9 @@ body::after {
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
   overflow: hidden;
+  flex-shrink: 0;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.7);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .panel:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.85);
@@ -158,13 +180,13 @@ body::after {
   display: flex; align-items: center; justify-content: space-between;
   padding: 8px 12px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.25);
 }
 .panel-header-left { display: flex; align-items: center; gap: 6px; }
 .panel-icon { font-size: 14px; }
 .panel-title { font-size: 12px; font-weight: 700; color: var(--text); }
 .panel-sub { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
-.panel-body { padding: 8px 12px; }
+.panel-body { padding: 10px 12px; }
 
 .badge {
   display: inline-flex; align-items: center; gap: 3px;
@@ -176,7 +198,7 @@ body::after {
 
 .date-picker-wrap {
   display: flex; align-items: center; gap: 4px;
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px; padding: 3px;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
@@ -195,7 +217,7 @@ body::after {
 .date-display { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 5px; }
 
 .input-field {
-  width: 100%; padding: 10px 13px; background: rgba(255, 255, 255, 0.65);
+  width: 100%; padding: 10px 13px; background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 10px;
   color: var(--text); font-family: inherit; font-size: 14px; line-height: 1.6;
   resize: vertical; outline: none; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
@@ -205,25 +227,23 @@ body::after {
 .hint-text { font-size: 10px; color: var(--text-dim); margin-top: 5px; }
 
 .custom-panel {
-  border-top: 1px solid rgba(0, 0, 0, 0.04); padding-top: 10px !important;
-  max-height: 280px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin;
+  border-top: 1px solid rgba(0, 0, 0, 0.04); 
+  padding-top: 10px !important;
 }
-.custom-panel::-webkit-scrollbar { width: 4px; }
-.custom-panel::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.12); border-radius: 4px; }
 
-.custom-divider { display: flex; align-items: center; gap: 8px; margin: 6px 0 8px; }
+.custom-divider { display: flex; align-items: center; gap: 8px; margin: 8px 0 10px; }
 .custom-divider > span { font-size: 10px; font-weight: 700; color: var(--accent); white-space: nowrap; letter-spacing: 1px; }
 .divider-line { flex: 1; height: 1px; background: rgba(2, 132, 199, 0.15); }
 
 .btn-reset {
-  width: 100%; margin-top: 6px; padding: 6px; background: rgba(255, 255, 255, 0.7);
+  width: 100%; margin-top: 8px; padding: 7px; background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 6px; color: var(--text-dim);
   font-family: inherit; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;
 }
 .btn-reset:hover { background: #fff; color: var(--text); border-color: rgba(0, 0, 0, 0.15); }
 
 input[type="range"] {
-  -webkit-appearance: none; width: 100%; height: 6px; background: rgba(0, 0, 0, 0.06);
+  -webkit-appearance: none; width: 100%; height: 6px; background: rgba(0, 0, 0, 0.08);
   border-radius: 999px; outline: none; transition: background 0.2s;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -243,7 +263,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   box-shadow: inset 0 0 80px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,255,255,0.03),
     0 22px 50px rgba(0,0,0,0.18), 0 6px 15px rgba(0,0,0,0.08), 0 0 0 14px #5c4033;
   border-radius: 4px; color: var(--chalk); position: relative;
-  outline: 2px solid #3d2b1a; margin-bottom: 42px;
+  outline: 2px solid #3d2b1a; margin-bottom: 42px; width: 100%;
   transition: all 0.3s;
 }
 .blackboard-bg::after {
@@ -257,18 +277,20 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
 
 /* ── 聯絡簿模式容器 ── */
 .book-view-wrap {
-  background-color: #fff;
+  background-color: transparent;
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-  border-radius: 6px;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   transition: all 0.3s;
+  overflow: auto;
+  padding: 4px 0;
 }
 .book-view-wrap:fullscreen, .book-view-wrap:-webkit-full-screen {
-  width: 100vw; height: 100vh; aspect-ratio: auto;
-  transform: none !important; box-shadow: none !important; border-radius: 0;
+  width: 100vw; height: 100vh;
+  background-color: #f1f5f9;
+  display: flex; justify-content: center; align-items: center;
 }
 
 .info-bar { display: flex; align-items: center; gap: 16px; padding: 6px 4px; }
@@ -292,6 +314,66 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
 }
 .bb-zy-tone {
   font-size: 0.8em; position: absolute; left: 100%; top: -0.15em; white-space: nowrap;
+}
+
+/* ── 專屬列印預覽區域 ── */
+#print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 6mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  body::before, body::after,
+  .app-layout, .modal-overlay {
+    display: none !important;
+  }
+
+  #print-root {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .print-page-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8mm;
+    width: 100%;
+    align-items: center;
+  }
+
+  .print-item-box {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    position: relative;
+    box-shadow: none !important;
+  }
+
+  .print-cut-line {
+    border-bottom: 1.5px dashed #94a3b8;
+    margin-top: 4mm;
+    width: 100%;
+    position: relative;
+  }
+  .print-cut-line::after {
+    content: '✂ 裁切線';
+    position: absolute;
+    right: 4px;
+    top: -9px;
+    font-size: 9px;
+    color: #64748b;
+    background: #fff;
+    padding: 0 4px;
+  }
 }
 
 /* ── Overrides Modal ── */
@@ -549,7 +631,7 @@ var DAY_NAMES = ["日","一","二","三","四","五","六"];
 var CN_NUM = ["","一","二","三","四","五","六","七","八","九","十","十一","十二",
   "十三","十四","十五","十六","十七","十八","十九","二十",
   "二十一","二十二","二十三","二十四","二十五","二十六","二十七","二十八","二十九","三十","三十一"];
-var DEFAULT_HOMEWORK = "一、國語第八課生字\n二、數學習作\n三、明天穿運動服";
+var DEFAULT_HOMEWORK = "一、國語第十課\n二、數學習作\n三、明天穿運動服\n四、運動會補假";
 
 /* ── 黑板模式 渲染邏輯 ── */
 var buildBoard = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, overrides) {
@@ -614,7 +696,7 @@ var buildBoard = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySque
   return '<div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:flex-end;height:100%;overflow:hidden;font-family:\'Noto Sans TC\',serif;">' + cols.join("") + '</div>';
 };
 
-/* ── 聯絡簿模式 渲染邏輯 (公分 cm 單位自訂欄寬、全參數即時連動、7欄由右至左、純直式日期) ── */
+/* ── 聯絡簿模式 渲染邏輯 (7 欄依自訂公分寬度緊湊排列，無多餘留白) ── */
 var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, overrides) {
   var d = new Date(dateStr + "T00:00:00");
   var month = d.getMonth() + 1, day = d.getDate(), dow = d.getDay();
@@ -626,8 +708,9 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
 
   var makeCell = function(inner) { return '<div style="height:' + cellH + 'px;display:flex;align-items:center;justify-content:center;">' + inner + '</div>'; };
 
-  var makeCol = function(items) {
-    var s = '<div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:' + bookColWCm + 'cm;border-left:1px solid ' + lineColor + ';padding:8px 0;height:100%;overflow:hidden;">';
+  var makeCol = function(items, isLast) {
+    var borderStyle = isLast ? '' : ('border-left:1px solid ' + lineColor + ';');
+    var s = '<div style="display:flex;flex-direction:column;align-items:center;width:' + bookColWCm + 'cm;flex-shrink:0;' + borderStyle + 'padding:6px 0;height:100%;overflow:hidden;">';
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
       if (it.gap) { s += '<div style="height:' + Math.round(cellH * 0.3) + 'px;"></div>'; continue; }
@@ -645,12 +728,12 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
 
   var ci = function(ch) { return { ch: ch, zy: (overrides && overrides[ch] !== undefined) ? overrides[ch] : getZhuyinForChar(ch) }; };
   
-  // 建立 7 個欄位（由右至左依序排列）
   var lines = hw.split("\n").filter(function(l){ return l.trim(); });
   var totalCols = 7;
   var cols = [];
 
   for (var colIdx = 0; colIdx < totalCols; colIdx++) {
+    var isLastCol = (colIdx === totalCols - 1);
     if (colIdx < lines.length) {
       var line = lines[colIdx].trim();
       var lItems = [], lChars = Array.from(line);
@@ -663,29 +746,31 @@ var buildBook = function(dateStr, hw, fs, cellHMult, zyScale, zySpacing, zySquee
           lItems.push({ alpha: run });
         } else { lItems.push(ci(ch)); }
       }
-      cols.push(makeCol(lItems));
+      cols.push(makeCol(lItems, isLastCol));
     } else {
-      cols.push(makeCol([])); // 空白格
+      cols.push(makeCol([], isLastCol));
     }
   }
 
-  // 構建純直式日期字元（國字標準直書正向）
   var dateChars = [];
   Array.from(CN_NUM[month] || String(month)).forEach(function(c) { dateChars.push(c); });
   dateChars.push("月");
   Array.from(CN_NUM[day] || String(day)).forEach(function(c) { dateChars.push(c); });
   dateChars.push("日");
-  dateChars.push("<div style='height:12px;'></div>");
+  dateChars.push("<div style='height:8px;'></div>");
   dateChars.push("星"); dateChars.push("期"); dateChars.push(DAY_NAMES[dow]);
 
-  return '<div style="background:#fff; border:2px solid ' + lineColor + '; border-radius:4px; display:flex; flex-direction:column; width:100%; height:100%; color:#2d3748; font-family:\'BiaoKai\', \'Noto Sans TC\', serif; overflow:hidden;">'
+  // 總寬度 = 7 個欄位寬度 + 1 個日期欄寬 (68px)
+  var totalContentWidth = 'calc(' + (bookColWCm * 7) + 'cm + 68px)';
+
+  return '<div style="background:#fff; border:2px solid ' + lineColor + '; border-radius:4px; display:inline-flex; flex-direction:column; width:' + totalContentWidth + '; max-width:100%; height:100%; color:#2d3748; font-family:\'BiaoKai\', \'Noto Sans TC\', serif; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.06);">'
     + '<div style="display:flex; border-bottom:2px solid ' + lineColor + '; background:#e6f3fd; color:#1e293b;">'
-    +   '<div style="flex:1; text-align:center; font-size:clamp(18px, 2.6vw, 26px); font-weight:900; padding:12px; letter-spacing:4px; display:flex; align-items:center; justify-content:center;">今天的作業和明天帶什麼</div>'
-    +   '<div style="width:72px; border-left:2px solid ' + lineColor + '; text-align:center; padding:12px 0; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; letter-spacing:2px;">日期</div>'
+    +   '<div style="flex:1; text-align:center; font-size:clamp(15px, 2.2vw, 22px); font-weight:900; padding:8px 4px; letter-spacing:3px; display:flex; align-items:center; justify-content:center;">今天的作業和明天帶什麼</div>'
+    +   '<div style="width:68px; border-left:2px solid ' + lineColor + '; text-align:center; padding:8px 0; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center; letter-spacing:2px; flex-shrink:0;">日期</div>'
     + '</div>'
     + '<div style="display:flex; flex:1; overflow:hidden;">'
-    +   '<div style="flex:1; display:flex; flex-direction:row-reverse; height:100%; overflow-x:auto; scrollbar-width:thin;">' + cols.join("") + '</div>'
-    +   '<div style="width:72px; border-left:2px solid ' + lineColor + '; display:flex; flex-direction:column; padding:18px 0; align-items:center; font-size:19px; font-weight:700; line-height:1.4; color:#1e293b; user-select:none; flex-shrink:0;">'
+    +   '<div style="display:flex; flex-direction:row-reverse; height:100%; overflow-x:auto; width:calc(100% - 68px);">' + cols.join("") + '</div>'
+    +   '<div style="width:68px; border-left:2px solid ' + lineColor + '; display:flex; flex-direction:column; padding:12px 0; align-items:center; font-size:18px; font-weight:700; line-height:1.35; color:#1e293b; user-select:none; flex-shrink:0;">'
     +      dateChars.map(function(c){ return c.startsWith('<') ? c : '<div>' + c + '</div>'; }).join("")
     +   '</div>'
     + '</div>'
@@ -726,6 +811,7 @@ var LightbulbSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 var CheckSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;color:#047857;display:inline-block;vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 var LoadingSVG = '<svg class="loading-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;color:#b45309;display:inline-block;vertical-align:middle;margin-right:4px;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>';
 var EyeSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--accent);display:block;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+var PrinterSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--accent);display:block;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>';
 
 /* ─── React App ─── */
 function App() {
@@ -744,7 +830,8 @@ function App() {
   var _zp = useState(1.1);    var zySpacing = _zp[0], setZySpacing = _zp[1];
   var _zq = useState(0.1);    var zySqueeze = _zq[0], setZySqueeze = _zq[1];
   var _cg = useState(0.18);   var colGapMult= _cg[0], setColGapMult= _cg[1];
-  var _bw = useState(1.7);    var bookColWCm= _bw[0], setBookColWCm= _bw[1]; // 聯絡簿欄寬 (公分 cm，預設 1.7cm 對應 64px)
+  var _bw = useState(1.7);    var bookColWCm= _bw[0], setBookColWCm= _bw[1];
+  var _pc = useState(3);      var printCopies=_pc[0], setPrintCopies=_pc[1];
 
   var loadHW = function() { try { var s = localStorage.getItem("bb_hw2"); return s ? JSON.parse(s) : {}; } catch(e) { return {}; } };
   var _hw = useState(loadHW); var hwDb = _hw[0], setHwDb = _hw[1];
@@ -844,13 +931,18 @@ function App() {
   var fs = Math.round(baseFs * fsMult);
   var pad = Math.round(fs * 0.85);
 
+  var singleBookHTML = useMemo(function() {
+    if (!pyReady) return '';
+    return buildBook(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, charOverrides);
+  }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, charOverrides]);
+
   var boardHTML = useMemo(function() {
     if (!pyReady) return '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(100,100,100,0.8);font-size:18px;font-family:serif;">注音引擎載入中...</div>';
     if (viewMode === "book") {
-      return buildBook(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, bookColWCm, charOverrides);
+      return singleBookHTML;
     }
     return buildBoard(curDate, todayHW, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, charOverrides);
-  }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, bookColWCm, charOverrides, viewMode]);
+  }, [curDate, todayHW, pyReady, tick, fs, cellHMult, zyScale, zySpacing, zySqueeze, colGapMult, singleBookHTML, charOverrides, viewMode]);
 
   var fmtDate = function(ds) {
     var d = new Date(ds + "T00:00:00");
@@ -863,154 +955,217 @@ function App() {
     return Array.from(set);
   }, [todayHW]);
 
-  return h("div", { className: "app-layout" },
-    h("div", { className: "sidebar-scroll" },
-      h("div", { className: "banner-card" },
-        h("div", { className: "banner-overlay" },
-          h("div", { className: "banner-title" },
-            h("span", { dangerouslySetInnerHTML: { __html: ChalkSVG } }),
-            h("span", null, "班級黑板")
-          ),
-          h("div", { className: "banner-sub" }, "直式注音黑板 • 聯絡簿自動排版")
-        )
-      ),
-
-      // 模式切換 Panel
-      h("div", { className: "panel" },
-        h("div", { className: "panel-header" },
-          h("div", { className: "panel-header-left" },
-            h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: EyeSVG } }),
-            h("span", { className: "panel-title" }, "顯示模式切換")
+  return h("div", null,
+    h("div", { className: "app-layout" },
+      h("div", { className: "sidebar-scroll" },
+        h("div", { className: "banner-card" },
+          h("div", { className: "banner-overlay" },
+            h("div", { className: "banner-title" },
+              h("span", { dangerouslySetInnerHTML: { __html: ChalkSVG } }),
+              h("span", null, "班級黑板")
+            ),
+            h("div", { className: "banner-sub" }, "直式注音黑板 • 聯絡簿自動排版")
           )
         ),
-        h("div", { className: "panel-body" },
-          h("div", { style: { display: "flex", gap: "6px", background: "rgba(0,0,0,0.05)", padding: "4px", borderRadius: "8px" } },
-            h("button", {
-              onClick: function() { setViewMode("blackboard"); },
-              style: { flex: 1, padding: "8px", borderRadius: "6px", border: "none", background: viewMode === "blackboard" ? "#fff" : "transparent", boxShadow: viewMode === "blackboard" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, color: viewMode === "blackboard" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
-            }, "黑板模式"),
-            h("button", {
-              onClick: function() { setViewMode("book"); },
-              style: { flex: 1, padding: "8px", borderRadius: "6px", border: "none", background: viewMode === "book" ? "#fff" : "transparent", boxShadow: viewMode === "book" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, color: viewMode === "book" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
-            }, "聯絡簿模式")
-          )
-        )
-      ),
 
-      // Date picker
-      h("div", { className: "panel" },
-        h("div", { className: "panel-header" },
-          h("div", { className: "panel-header-left" },
-            h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: CalendarSVG } }),
-            h("span", { className: "panel-title" }, "今日日期")
-          ),
-          h("span", { className: "badge " + (pyReady ? "badge-success" : "badge-warning"), style: { display: "inline-flex", alignItems: "center" } },
-            pyReady ? [h("span", { dangerouslySetInnerHTML: { __html: CheckSVG } }), "注音就緒"] : [h("span", { dangerouslySetInnerHTML: { __html: LoadingSVG } }), "載入中"]
-          )
-        ),
-        h("div", { className: "panel-body" },
-          h("div", { className: "date-picker-wrap" },
-            h("button", { className: "date-nav-btn", onClick: function(){navDate(-1);} }, "◀"),
-            h("input", { type: "date", value: curDate, onChange: function(e){setDate(e.target.value);}, style:{flex:1,minWidth:0} }),
-            h("button", { className: "date-nav-btn", onClick: function(){navDate(1);} }, "▶")
-          ),
-          h("div", { className: "date-display" }, fmtDate(curDate))
-        )
-      ),
-
-      // Homework Content
-      h("div", { className: "panel" },
-        h("div", { className: "panel-header" },
-          h("div", { className: "panel-header-left" },
-            h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: PencilSVG } }),
-            h("span", { className: "panel-title" }, "文字內容")
-          ),
-          h("button", { className: "btn-primary", style: { padding: "4px 10px", fontSize: "11px", height: "auto" }, onClick: function() { setShowOverridesModal(true); } }, "進階注音修改")
-        ),
-        h("div", { className: "panel-body" },
-          h("textarea", { className: "input-field", value: todayHW, onChange: function(e){updHW(e.target.value);}, rows: 7, placeholder: "每行＝畫面上一直行（欄）" }),
-          h("p", { className: "hint-text", style: { display: "flex", alignItems: "center" } },
-            h("span", { dangerouslySetInnerHTML: { __html: LightbulbSVG } }), "換行即換欄，英數字自動橫排"
-          )
-        )
-      ),
-
-      // Custom mode
-      h("div", { className: "panel" },
-        h("div", { className: "panel-header" },
-          h("div", { className: "panel-header-left" },
-            h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: ControlsSVG } }),
-            h("div", null, h("div", { className: "panel-title" }, "自訂排版模式"), h("div", { className: "panel-sub" }, "調整字體、注音與欄位間距"))
-          ),
-          h(Toggle, { value: customMode, onChange: function(){setCustomMode(function(v){return !v;});} })
-        ),
-        customMode && h("div", { className: "panel-body custom-panel" },
-          h("div", { className: "custom-divider" }, h("span", null, "中文與格線"), h("div", { className: "divider-line" })),
-          h(Slider, { label: "字體大小", display: (fsMult * 100).toFixed(0) + "%", min: 0.5, max: 1.8, step: 0.05, value: fsMult, onChange: setFsMult }),
-          h(Slider, { label: "行高 / 字間距", display: cellHMult.toFixed(2) + "×", min: 1.2, max: 2.8, step: 0.05, value: cellHMult, onChange: setCellHMult }),
-          
-          viewMode === "blackboard" && h(Slider, { label: "黑板欄間距", display: (colGapMult * 100).toFixed(0) + "%", min: 0, max: 0.5, step: 0.02, value: colGapMult, onChange: setColGapMult }),
-          viewMode === "book" && h(Slider, { label: "聯絡簿欄位寬度 (公分)", display: Number(bookColWCm).toFixed(1) + " cm", min: 1.0, max: 4.0, step: 0.1, value: bookColWCm, onChange: setBookColWCm }),
-          
-          h("div", { className: "custom-divider" }, h("span", null, "注音"), h("div", { className: "divider-line" })),
-          h(Slider, { label: "注音字體大小", display: (zyScale * 100).toFixed(0) + "% 字", min: 0.22, max: 0.52, step: 0.01, value: zyScale, onChange: setZyScale }),
-          h(Slider, { label: "注音符號間距", display: zySpacing.toFixed(2) + "em", min: 0.5, max: 1.5, step: 0.05, value: zySpacing, onChange: setZySpacing }),
-          h(Slider, { label: "多符號擠壓量", display: zySqueeze.toFixed(2), min: 0, max: 0.3, step: 0.01, value: zySqueeze, onChange: setZySqueeze }),
-          
-          h("button", { className: "btn-reset", onClick: function() { setFsMult(1.0); setCellHMult(1.55); setZyScale(0.35); setZySpacing(1.1); setZySqueeze(0.1); setColGapMult(0.18); setBookColWCm(1.7); } }, "↺ 恢復預設值")
-        )
-      )
-    ),
-
-    // ── Main Content Area ──
-    h("div", { className: "board-wrap" },
-      h("div", { ref: bbRef, className: viewMode === "book" ? "book-view-wrap" : "blackboard-bg", style: { width: "100%", aspectRatio: "16/9", position: "relative" } },
-        h("button", { className: "btn-fullscreen", onClick: toggleFS }, fullsc ? "✕ 退出" : "⛶ 全螢幕"),
-        h("div", {
-          style: {
-            position: "absolute",
-            top: viewMode === "book" ? "0" : (pad + "px"),
-            left: viewMode === "book" ? "0" : (pad + "px"),
-            right: viewMode === "book" ? "0" : (pad + "px"),
-            bottom: viewMode === "book" ? "0" : (pad + "px"),
-            overflow: "hidden"
-          },
-          dangerouslySetInnerHTML: { __html: boardHTML }
-        })
-      ),
-
-      // Info bar below
-      h("div", { className: "info-bar" },
-        h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "字體 " + fs + "px")),
-        h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "注音 " + Math.round(fs * zyScale) + "px")),
-        viewMode === "book" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "欄寬 " + Number(bookColWCm).toFixed(1) + " cm")),
-        h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, boardSize.w + " × " + boardSize.h + " px"))
-      )
-    ),
-
-    // ── Overrides Modal ──
-    showOverridesModal && h("div", { className: "modal-overlay" },
-      h("div", { className: "modal-card" },
-        h("div", { className: "modal-header" },
-          h("div", null, h("div", { className: "modal-title" }, "🎯 進階中文字注音自訂"), h("div", { className: "modal-sub" }, "您可以為這篇內容的每個漢字個別指定注音與聲調")),
-          h("button", { className: "btn-secondary", onClick: function(){ setShowOverridesModal(false); }, style: { padding: "4px 8px", fontSize: "12px" } }, "✕")
-        ),
-        h("div", { className: "modal-body" },
-          uniqueChars.length === 0 ? h("div", { style: { textAlign: "center", color: "var(--text-dim)", padding: "24px 0" } }, "內容中目前沒有中文字。")
-          : h("div", { className: "overrides-grid" },
-              uniqueChars.map(function(ch) {
-                var currentVal = charOverrides[ch] !== undefined ? charOverrides[ch] : getZhuyinForChar(ch);
-                return h("div", { key: ch, className: "override-item" },
-                  h("span", { className: "override-char" }, ch),
-                  h("input", { type: "text", className: "override-input", value: currentVal, placeholder: "無注音", onChange: function(e) { var val = e.target.value; setCharOverrides(function(prev) { var next = Object.assign({}, prev); if (val.trim() === "") { delete next[ch]; } else { next[ch] = val.trim(); } return next; }); } })
-                );
-              })
+        // 模式切換 Panel
+        h("div", { className: "panel" },
+          h("div", { className: "panel-header" },
+            h("div", { className: "panel-header-left" },
+              h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: EyeSVG } }),
+              h("span", { className: "panel-title" }, "顯示模式切換")
             )
+          ),
+          h("div", { className: "panel-body" },
+            h("div", { style: { display: "flex", gap: "6px", background: "rgba(0,0,0,0.05)", padding: "4px", borderRadius: "8px" } },
+              h("button", {
+                onClick: function() { setViewMode("blackboard"); },
+                style: { flex: 1, padding: "8px", borderRadius: "6px", border: "none", background: viewMode === "blackboard" ? "#fff" : "transparent", boxShadow: viewMode === "blackboard" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, color: viewMode === "blackboard" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+              }, "黑板模式"),
+              h("button", {
+                onClick: function() { setViewMode("book"); },
+                style: { flex: 1, padding: "8px", borderRadius: "6px", border: "none", background: viewMode === "book" ? "#fff" : "transparent", boxShadow: viewMode === "book" ? "0 2px 4px rgba(0,0,0,0.1)" : "none", cursor: "pointer", fontWeight: 700, color: viewMode === "book" ? "var(--accent)" : "var(--text-dim)", transition: "all 0.2s" }
+              }, "聯絡簿模式")
+            )
+          )
         ),
-        h("div", { className: "modal-footer" },
-          h("button", { className: "btn-secondary", onClick: function() { if (confirm("確定要清除所有自訂的漢字注音嗎？")) { setCharOverrides({}); } } }, "重設所有漢字"),
-          h("button", { className: "btn-primary", onClick: function(){ setShowOverridesModal(false); } }, "✓ 完成設定")
+
+        // 專屬 A4 友善列印 Panel
+        h("div", { className: "panel" },
+          h("div", { className: "panel-header" },
+            h("div", { className: "panel-header-left" },
+              h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: PrinterSVG } }),
+              h("span", { className: "panel-title" }, "A4 聯絡簿列印")
+            )
+          ),
+          h("div", { className: "panel-body", style: { display: "flex", flexDirection: "column", gap: "10px" } },
+            h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between" } },
+              h("span", { style: { fontSize: "12px", color: "var(--text-dim)", fontWeight: 600 } }, "每頁 A4 份數："),
+              h("select", {
+                value: printCopies,
+                onChange: function(e) { setPrintCopies(Number(e.target.value)); },
+                style: { padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 700, outline: "none", color: "var(--text)" }
+              },
+                h("option", { value: 2 }, "2 份 (上下二等分)"),
+                h("option", { value: 3 }, "3 份 (三等分)")
+              )
+            ),
+            h("button", {
+              className: "btn-primary",
+              onClick: function() { window.print(); },
+              style: { width: "100%", padding: "8px", fontSize: "13px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }
+            },
+              h("span", { dangerouslySetInnerHTML: { __html: PrinterSVG } }),
+              h("span", null, "列印聯絡簿 (A4 拼版)")
+            )
+          )
+        ),
+
+        // Date picker
+        h("div", { className: "panel" },
+          h("div", { className: "panel-header" },
+            h("div", { className: "panel-header-left" },
+              h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: CalendarSVG } }),
+              h("span", { className: "panel-title" }, "今日日期")
+            ),
+            h("span", { className: "badge " + (pyReady ? "badge-success" : "badge-warning"), style: { display: "inline-flex", alignItems: "center" } },
+              pyReady ? [h("span", { dangerouslySetInnerHTML: { __html: CheckSVG } }), "注音就緒"] : [h("span", { dangerouslySetInnerHTML: { __html: LoadingSVG } }), "載入中"]
+            )
+          ),
+          h("div", { className: "panel-body" },
+            h("div", { className: "date-picker-wrap" },
+              h("button", { className: "date-nav-btn", onClick: function(){navDate(-1);} }, "◀"),
+              h("input", { type: "date", value: curDate, onChange: function(e){setDate(e.target.value);}, style:{flex:1,minWidth:0} }),
+              h("button", { className: "date-nav-btn", onClick: function(){navDate(1);} }, "▶")
+            ),
+            h("div", { className: "date-display" }, fmtDate(curDate))
+          )
+        ),
+
+        // Homework Content
+        h("div", { className: "panel" },
+          h("div", { className: "panel-header" },
+            h("div", { className: "panel-header-left" },
+              h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: PencilSVG } }),
+              h("span", { className: "panel-title" }, "文字內容")
+            ),
+            h("button", { className: "btn-primary", style: { padding: "4px 10px", fontSize: "11px", height: "auto" }, onClick: function() { setShowOverridesModal(true); } }, "進階注音修改")
+          ),
+          h("div", { className: "panel-body" },
+            h("textarea", { className: "input-field", value: todayHW, onChange: function(e){updHW(e.target.value);}, rows: 7, placeholder: "每行＝畫面上一直行（欄）" }),
+            h("p", { className: "hint-text", style: { display: "flex", alignItems: "center" } },
+              h("span", { dangerouslySetInnerHTML: { __html: LightbulbSVG } }), "換行即換欄，英數字自動橫排"
+            )
+          )
+        ),
+
+        // Custom mode
+        h("div", { className: "panel" },
+          h("div", { className: "panel-header" },
+            h("div", { className: "panel-header-left" },
+              h("span", { className: "panel-icon", dangerouslySetInnerHTML: { __html: ControlsSVG } }),
+              h("div", null, h("div", { className: "panel-title" }, "自訂排版模式"), h("div", { className: "panel-sub" }, "調整字體、注音與欄位間距"))
+            ),
+            h(Toggle, { value: customMode, onChange: function(){setCustomMode(function(v){return !v;});} })
+          ),
+          customMode && h("div", { className: "panel-body custom-panel" },
+            h("div", { className: "custom-divider" }, h("span", null, "中文與格線"), h("div", { className: "divider-line" })),
+            h(Slider, { label: "字體大小", display: (fsMult * 100).toFixed(0) + "%", min: 0.5, max: 1.8, step: 0.05, value: fsMult, onChange: setFsMult }),
+            h(Slider, { label: "行高 / 字間距", display: cellHMult.toFixed(2) + "×", min: 1.2, max: 2.8, step: 0.05, value: cellHMult, onChange: setCellHMult }),
+            
+            viewMode === "blackboard" && h(Slider, { label: "黑板欄間距", display: (colGapMult * 100).toFixed(0) + "%", min: 0, max: 0.5, step: 0.02, value: colGapMult, onChange: setColGapMult }),
+            viewMode === "book" && h(Slider, { label: "聯絡簿欄位寬度 (公分)", display: Number(bookColWCm).toFixed(1) + " cm", min: 1.0, max: 4.0, step: 0.1, value: bookColWCm, onChange: setBookColWCm }),
+            
+            h("div", { className: "custom-divider" }, h("span", null, "注音"), h("div", { className: "divider-line" })),
+            h(Slider, { label: "注音字體大小", display: (zyScale * 100).toFixed(0) + "% 字", min: 0.22, max: 0.52, step: 0.01, value: zyScale, onChange: setZyScale }),
+            h(Slider, { label: "注音符號間距", display: zySpacing.toFixed(2) + "em", min: 0.5, max: 1.5, step: 0.05, value: zySpacing, onChange: setZySpacing }),
+            h(Slider, { label: "多符號擠壓量", display: zySqueeze.toFixed(2), min: 0, max: 0.3, step: 0.01, value: zySqueeze, onChange: setZySqueeze }),
+            
+            h("button", { 
+              className: "btn-reset", 
+              onClick: function() { 
+                setFsMult(1.0); 
+                setCellHMult(1.55); 
+                setZyScale(0.35); 
+                setZySpacing(1.1); 
+                setZySqueeze(0.1); 
+                setColGapMult(0.18); 
+                setBookColWCm(1.7); 
+              } 
+            }, "↺ 恢復預設值")
+          )
         )
+      ),
+
+      // ── Main Content Area ──
+      h("div", { className: "board-wrap" },
+        h("div", { ref: bbRef, className: viewMode === "book" ? "book-view-wrap" : "blackboard-bg", style: { position: "relative", height: "calc(100vh - 65px)" } },
+          h("button", { className: "btn-fullscreen", onClick: toggleFS }, fullsc ? "✕ 退出" : "⛶ 全螢幕"),
+          h("div", {
+            style: {
+              position: viewMode === "book" ? "static" : "absolute",
+              top: viewMode === "book" ? "auto" : (pad + "px"),
+              left: viewMode === "book" ? "auto" : (pad + "px"),
+              right: viewMode === "book" ? "auto" : (pad + "px"),
+              bottom: viewMode === "book" ? "auto" : (pad + "px"),
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              overflow: "hidden"
+            },
+            dangerouslySetInnerHTML: { __html: boardHTML }
+          })
+        ),
+
+        // Info bar below
+        h("div", { className: "info-bar" },
+          h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "字體 " + fs + "px")),
+          h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "注音 " + Math.round(fs * zyScale) + "px")),
+          viewMode === "book" && h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, "欄寬 " + Number(bookColWCm).toFixed(1) + " cm")),
+          h("div", { className: "info-item" }, h("span", { dangerouslySetInnerHTML: { __html: StarSVG } }), h("span", null, boardSize.w + " × " + boardSize.h + " px"))
+        )
+      ),
+
+      // ── Overrides Modal ──
+      showOverridesModal && h("div", { className: "modal-overlay" },
+        h("div", { className: "modal-card" },
+          h("div", { className: "modal-header" },
+            h("div", null, h("div", { className: "modal-title" }, "🎯 進階中文字注音自訂"), h("div", { className: "modal-sub" }, "您可以為這篇內容的每個漢字個別指定注音與聲調")),
+            h("button", { className: "btn-secondary", onClick: function(){ setShowOverridesModal(false); }, style: { padding: "4px 8px", fontSize: "12px" } }, "✕")
+          ),
+          h("div", { className: "modal-body" },
+            uniqueChars.length === 0 ? h("div", { style: { textAlign: "center", color: "var(--text-dim)", padding: "24px 0" } }, "內容中目前沒有中文字。")
+            : h("div", { className: "overrides-grid" },
+                uniqueChars.map(function(ch) {
+                  var currentVal = charOverrides[ch] !== undefined ? charOverrides[ch] : getZhuyinForChar(ch);
+                  return h("div", { key: ch, className: "override-item" },
+                    h("span", { className: "override-char" }, ch),
+                    h("input", { type: "text", className: "override-input", value: currentVal, placeholder: "無注音", onChange: function(e) { var val = e.target.value; setCharOverrides(function(prev) { var next = Object.assign({}, prev); if (val.trim() === "") { delete next[ch]; } else { next[ch] = val.trim(); } return next; }); } })
+                  );
+                })
+              )
+          ),
+          h("div", { className: "modal-footer" },
+            h("button", { className: "btn-secondary", onClick: function() { if (confirm("確定要清除所有自訂的漢字注音嗎？")) { setCharOverrides({}); } } }, "重設所有漢字"),
+            h("button", { className: "btn-primary", onClick: function(){ setShowOverridesModal(false); } }, "✓ 完成設定")
+          )
+        )
+      )
+    ),
+
+    // ── 專屬 A4 多合一拼版列印容器 ──
+    h("div", { id: "print-root" },
+      h("div", { className: "print-page-grid" },
+        Array.from({ length: printCopies }).map(function(_, idx) {
+          return h("div", { key: idx, className: "print-item-box" },
+            h("div", {
+              style: { width: "100%", height: (270 / printCopies - 10) + "mm", minHeight: "65mm", display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" },
+              dangerouslySetInnerHTML: { __html: singleBookHTML }
+            }),
+            idx < printCopies - 1 && h("div", { className: "print-cut-line" })
+          );
+        })
       )
     )
   );
