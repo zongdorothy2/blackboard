@@ -314,7 +314,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
   line-height: 1; position: relative; display: flex; align-items: center; justify-content: center; width: 1em;
 }
 .bb-zy-tone {
-  font-size: 0.8em; position: absolute; left: 100%; top: 0.15em; white-space: nowrap;
+  font-size: 0.8em; position: absolute; left: 100%; top: -0.15em; white-space: nowrap;
 }
 
 /* ── 專屬 A4 列印預覽 ── */
@@ -545,7 +545,7 @@ var COMMON_ZHUYIN = {
   "年": "ㄋㄧㄢˊ", "今": "ㄐㄧㄣ", "天": "ㄊㄧㄢ",
   "國": "ㄍㄨㄛˊ", "語": "ㄩˇ", "數": "ㄕㄨˋ", "學": "ㄒㄩㄝˊ",
   "自": "ㄗˋ", "然": "ㄖㄢˊ", "社": "ㄕㄜˋ", "會": "ㄏㄨㄟˋ",
-  "音": "ㄧㄣ", "樂": "ㄩㄝˋ", "體": "Tㄧˇ", "育": "ㄩˋ",
+  "音": "ㄧㄣ", "樂": "ㄩㄝˋ", "體": "ㄊㄧˇ", "育": "ㄩˋ",
   "美": "ㄇㄟˇ", "術": "ㄕㄨˋ", "健": "ㄐㄧㄢˋ", "康": "ㄎㄤ",
   "電": "ㄉㄧㄢˋ", "腦": "ㄋㄠˇ", "英": "ㄧㄥ", "文": "ㄨㄣˊ",
   "彈": "ㄊㄢˊ", "性": "ㄒㄧㄥˋ", "綜": "ㄗㄨㄥ", "合": "ㄏㄜˊ",
@@ -557,7 +557,7 @@ var COMMON_ZHUYIN = {
   "的": "ㄉㄜ˙", "了": "ㄌㄜ˙", "是": "ㄕˋ", "我": "ㄨㄛˇ",
   "不": "ㄅㄨˋ", "有": "ㄧㄡˇ", "在": "ㄗㄞˋ", "和": "ㄏㄜˊ",
   "老": "ㄌㄠˇ", "師": "ㄕ", "同": "ㄊㄨㄥˊ",
-  "請": "ㄑㄧㄥˇ", "帶": "ㄉㄞˋ", "交": "ㄐㄧㄠ", "來": "來"
+  "請": "ㄑㄧㄥˇ", "帶": "ㄉㄞˋ", "交": "ㄐㄧㄠ", "來": "ㄌㄞˊ"
 };
 
 var getZhuyinForChar = function(char) {
@@ -640,13 +640,8 @@ var buildCharHTML = function(char, zy, fs, zyScale, zySpacing, zySqueeze) {
   var gap = Math.max(0.4, slots > 1 ? zySpacing - (slots - 1) * zySqueeze : zySpacing);
   var cells = [];
   if (p.type === "light") cells.push('<div class="bb-zy-light" style="height:' + gap.toFixed(2) + 'em;font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</div>');
-  
-  var targetToneIndex = p.chars.length >= 2 ? 1 : 0;
-
   for (var i = 0; i < p.chars.length; i++) {
-    // 針對剛好 2 個注音符號的情況，把聲調位置往上提高（例如 top: -0.35em），讓它對齊第二個字右側上方
-    var toneTopStyle = (p.chars.length === 2 && i === 1) ? 'top:-0.35em;' : 'top:0.15em;';
-    var tm = (i === targetToneIndex && p.type === "standard") ? '<div class="bb-zy-tone" style="' + toneTopStyle + 'font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</div>' : "";
+    var tm = (i === p.chars.length - 1 && p.type === "standard") ? '<div class="bb-zy-tone" style="font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</div>' : "";
     cells.push('<div class="bb-zy-char" style="height:' + gap.toFixed(2) + 'em;font-family:' + KAI_FONT_FAMILY + ';">' + p.chars[i] + tm + '</div>');
   }
 
@@ -823,12 +818,8 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
 
     var zhuyinTracks = [];
     if (p.type === "light") zhuyinTracks.push('<div style="font-size:' + Math.round(zyItemFs*0.9) + 'px;font-weight:900;color:#0284c7;line-height:' + gap.toFixed(2) + 'em;font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</div>');
-    
-    var targetToneIndex = p.chars.length >= 2 ? 1 : 0;
-
     for (var i = 0; i < p.chars.length; i++) {
-      var toneTopStyle = (p.chars.length === 2 && i === 1) ? 'top:-0.35em;' : 'top:0.15em;';
-      var tm = (i === targetToneIndex && p.type === "standard") ? '<span style="position:absolute;left:100%;' + toneTopStyle + 'font-size:' + Math.round(zyItemFs*0.8) + 'px;color:#0284c7;font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</span>' : '';
+      var tm = (i === p.chars.length - 1 && p.type === "standard") ? '<span style="position:absolute;left:100%;top:-2px;font-size:' + Math.round(zyItemFs*0.8) + 'px;color:#0284c7;font-family:' + KAI_FONT_FAMILY + ';">' + p.tone + '</span>' : '';
       zhuyinTracks.push('<div style="font-size:' + zyItemFs + 'px;font-weight:700;line-height:' + gap.toFixed(2) + 'em;position:relative;font-family:' + KAI_FONT_FAMILY + ';">' + p.chars[i] + tm + '</div>');
     }
 
@@ -839,8 +830,7 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
         mainSquareContent = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + bigZyFs + 'px;font-weight:900;color:#0284c7;line-height:1.1;font-family:' + KAI_FONT_FAMILY + ';">'
           + (p.type === "light" ? '<span style="font-size:' + Math.round(bigZyFs*0.6) + 'px;margin-bottom:-4px;">' + p.tone + '</span>' : '')
           + p.chars.map(function(s, idx){
-              var toneTopStyle = (p.chars.length === 2 && idx === 1) ? 'top:-0.35em;' : 'top:0.15em;';
-              var tm = (idx === targetToneIndex && p.type === "standard") ? '<span style="position:absolute;left:100%;' + toneTopStyle + 'font-size:' + Math.round(bigZyFs*0.6) + 'px;color:#d97706;">' + p.tone + '</span>' : '';
+              var tm = (idx === p.chars.length - 1 && p.type === "standard") ? '<span style="position:absolute;left:100%;top:-2px;font-size:' + Math.round(bigZyFs*0.6) + 'px;color:#d97706;">' + p.tone + '</span>' : '';
               return '<span style="position:relative;">' + s + tm + '</span>';
             }).join("")
           + '</div>';
