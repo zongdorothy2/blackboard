@@ -994,7 +994,7 @@ function App() {
   var _pc = useState(6);      var printCopies=_pc[0], setPrintCopies=_pc[1];
   var _oz = useState(false);  var onlyZhuyinInSquare=_oz[0], setOnlyZhuyinInSquare=_oz[1];
 
-  var _pg = useState(2.2);    var practiceGridSizeCm = _pg[0], setPracticeGridSizeCm = _pg[1];
+  var _pg = useState(2.0);    var practiceGridSizeCm = _pg[0], setPracticeGridSizeCm = _pg[1];
   var _pz = useState(0.8);    var practiceZyWidthCm  = _pz[0], setPracticeZyWidthCm  = _pz[1];
 
   var loadHW = function() { try { var s = localStorage.getItem("bb_hw2"); return s ? JSON.parse(s) : {}; } catch(e) { return {}; } };
