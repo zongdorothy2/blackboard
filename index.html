@@ -10,11 +10,6 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.24.2/dist/index.js"></script>
-  
-  <!-- Firebase compatibility scripts -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
 :root {
@@ -579,20 +574,6 @@ var useEffect = React.useEffect;
 var useRef = React.useRef;
 var useMemo = React.useMemo;
 
-var firebaseConfig = {
-  apiKey: "AIzaSyBMUMdFRyuY4TtPX_1QRzUaADCEeaHwa1s",
-  authDomain: "classbonuspoints.firebaseapp.com",
-  projectId: "classbonuspoints",
-  storageBucket: "classbonuspoints.firebasestorage.app",
-  messagingSenderId: "258366947766",
-  appId: "1:258366947766:web:bdbc1e9fccafd82c678117",
-  measurementId: "G-6Q4QTKMNBZ"
-};
-
-if (window.firebase && !firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
 var getTodayStr = function() {
   var d = new Date();
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -1006,8 +987,6 @@ function App() {
   useEffect(function() { localStorage.setItem("bb_char_overrides", JSON.stringify(charOverrides)); }, [charOverrides]);
 
   var _som = useState(false); var showOverridesModal = _som[0], setShowOverridesModal = _som[1];
-  var _usr = useState(null); var user = _usr[0], setUser = _usr[1];
-  var _syn = useState("idle"); var syncStatus = _syn[0], setSyncStatus = _syn[1];
 
   var todayHW = hwDb[curDate] !== undefined ? hwDb[curDate] : DEFAULT_HOMEWORK;
 
@@ -1015,48 +994,6 @@ function App() {
     var el = bbRef.current; if (!el) return;
     setBoardSize({ w: Math.max(200, el.offsetWidth - 28), h: Math.max(100, el.offsetHeight - 28) });
   };
-
-  useEffect(function() {
-    if (!window.firebase) return;
-    return firebase.auth().onAuthStateChanged(function(u) {
-      setUser(u);
-      if (u) {
-        setSyncStatus("syncing");
-        var docRef = firebase.firestore().collection('teachers').doc(u.uid);
-        docRef.get().then(function(doc) {
-          var data = doc.exists ? (doc.data() || {}) : {};
-          var remoteHW = data.homework || {};
-          var remoteOverrides = data.charOverrides || {};
-          var localHW = {}; try { var s = localStorage.getItem("bb_hw2"); if (s) localHW = JSON.parse(s); } catch(e){}
-          var localOverrides = {}; try { var o = localStorage.getItem("bb_char_overrides"); if (o) localOverrides = JSON.parse(o); } catch(e){}
-          var initialUpdate = {};
-          if (Object.keys(localHW).length > 0 && Object.keys(remoteHW).length === 0) { initialUpdate.homework = localHW; remoteHW = localHW; }
-          if (Object.keys(localOverrides).length > 0 && Object.keys(remoteOverrides).length === 0) { initialUpdate.charOverrides = localOverrides; remoteOverrides = localOverrides; }
-          if (Object.keys(initialUpdate).length > 0) docRef.set(initialUpdate, { merge: true }).catch(function(err){});
-          setHwDb(remoteHW); setCharOverrides(remoteOverrides); setSyncStatus("done");
-        }).catch(function(err) { setSyncStatus("error"); });
-      } else { setSyncStatus("idle"); }
-    });
-  }, []);
-
-  useEffect(function() {
-    if (!user || !window.firebase) return;
-    setSyncStatus("syncing");
-    var t = setTimeout(function() {
-      var updateObj = { homework: {} }; updateObj.homework[curDate] = todayHW;
-      firebase.firestore().collection('teachers').doc(user.uid).set(updateObj, { merge: true })
-        .then(function() { setSyncStatus("done"); })
-        .catch(function(err) { setSyncStatus("error"); });
-    }, 1000);
-    return function() { clearTimeout(t); };
-  }, [todayHW, curDate, user]);
-
-  useEffect(function() {
-    if (!user || !window.firebase) return;
-    setSyncStatus("syncing");
-    firebase.firestore().collection('teachers').doc(user.uid).set({ charOverrides: charOverrides }, { merge: true })
-      .then(function() { setSyncStatus("done"); }).catch(function(err) { setSyncStatus("error"); });
-  }, [charOverrides, user]);
 
   useEffect(function() {
     var id = setTimeout(measureBoard, 80);
