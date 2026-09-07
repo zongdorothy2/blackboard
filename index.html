@@ -970,8 +970,8 @@ function App() {
 
   var _fm = useState(1.0);    var fsMult    = _fm[0], setFsMult    = _fm[1];
   var _ch = useState(1.55);   var cellHMult = _ch[0], setCellHMult = _ch[1];
-  var _zs = useState(0.60);   var zyScale   = _zs[0], setZyScale   = _zs[1];
-  var _zp = useState(1.1);    var zySpacing = _zp[0], setZySpacing = _zp[1];
+  var _zs = useState(0.50);   var zyScale   = _zs[0], setZyScale   = _zs[1];
+  var _zp = useState(1.0);    var zySpacing = _zp[0], setZySpacing = _zp[1];
   var _zq = useState(0.1);    var zySqueeze = _zq[0], setZySqueeze = _zq[1];
   var _cg = useState(0.18);   var colGapMult= _cg[0], setColGapMult= _cg[1];
   
@@ -1221,8 +1221,8 @@ function App() {
               onClick: function() { 
                 setFsMult(1.0); 
                 setCellHMult(1.55); 
-                setZyScale(0.60);
-                setZySpacing(1.1); 
+                setZyScale(0.50);
+                setZySpacing(1.0); 
                 setZySqueeze(0.1); 
                 setColGapMult(0.18); 
                 setBookColWCm(1.7);
