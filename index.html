@@ -447,7 +447,7 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.22); }
 var PINYIN_TO_ZHUYIN = (function() {
   var initials = {
     "b":"ㄅ","p":"ㄆ","m":"ㄇ","f":"ㄈ",
-    "d":"ㄉ","t":"ㄊ","n":"ㄋ","l":"ㄌ",
+    "d":"ㄉ","t":"ㄊ","n":"ㄋ","ㄌ":"ㄌ","l":"ㄌ",
     "g":"ㄍ","k":"ㄎ","h":"ㄏ",
     "j":"ㄐ","q":"ㄑ","x":"ㄒ",
     "zh":"ㄓ","ch":"ㄔ","sh":"ㄕ","r":"ㄖ",
@@ -478,17 +478,25 @@ var PINYIN_TO_ZHUYIN = (function() {
       plain = py.slice(0, -1);
     }
 
-    if      (plain === "yi")  plain = "i";
-    else if (plain === "wu")  plain = "u";
-    else if (plain === "yu")  plain = "v";
-    else if (plain === "yin") plain = "in";
-    else if (plain === "ying")plain = "ing";
-    else if (plain === "yun") plain = "vn";
-    else if (plain === "yue") plain = "ve";
-    else if (plain === "yuan")plain = "van";
-    else if (plain === "yong")plain = "iong";
-    else if (plain.charAt(0) === "y") plain = plain.slice(1);
-    else if (plain.charAt(0) === "w") {
+    // 拼音特殊規則校正（精準保留 ㄧ 介音）
+    if      (plain === "yi")   plain = "i";
+    else if (plain === "wu")   plain = "u";
+    else if (plain === "yu")   plain = "v";
+    else if (plain === "yin")  plain = "in";
+    else if (plain === "ying") plain = "ing";
+    else if (plain === "yun")  plain = "vn";
+    else if (plain === "yue")  plain = "ve";
+    else if (plain === "yuan") plain = "van";
+    else if (plain === "yong") plain = "iong";
+    else if (plain === "ya")   plain = "ia";
+    else if (plain === "ye")   plain = "ie";
+    else if (plain === "yao")  plain = "iao";
+    else if (plain === "you")  plain = "iou";
+    else if (plain === "yan")  plain = "ian";
+    else if (plain === "yang") plain = "iang";
+    else if (plain.charAt(0) === "y") {
+      plain = "i" + plain.slice(1);
+    } else if (plain.charAt(0) === "w") {
       plain = plain.slice(1);
       if (plain.charAt(0) !== "u") plain = "u" + plain;
     }
@@ -547,12 +555,13 @@ var COMMON_ZHUYIN = {
   "習": "ㄒㄧˊ", "讀": "ㄉㄨˊ", "寫": "ㄒㄧㄝˇ",
   "的": "ㄉㄜ˙", "了": "ㄌㄜ˙", "是": "ㄕˋ", "我": "ㄨㄛˇ",
   "不": "ㄅㄨˋ", "有": "ㄧㄡˇ", "在": "ㄗㄞˋ", "和": "ㄏㄜˊ",
-  "老": "ㄌㄠˇ", "師": "ㄕ", "同": "ㄊㄨㄥˊ", "牙": "ㄧㄚˊ", "齒": "ㄔˇ",
+  "老": "ㄌㄠˇ", "師": "ㄕ", "同": "ㄊㄨㄥˊ", 
+  "牙": "ㄧㄚˊ", "齒": "ㄔˇ", "葉": "ㄧㄝˋ", "子": "ㄗˇ",
   "請": "ㄑㄧㄥˇ", "帶": "ㄉㄞˋ", "交": "ㄐㄧㄠ", "來": "ㄌㄞˊ"
 };
 
 var getZhuyinForChar = function(char) {
-  if (!/[\u4e00-\u9fa5]/.test(char)) return "";
+  if (!char) return "";
   if (COMMON_ZHUYIN[char]) return COMMON_ZHUYIN[char];
   var pinyinFn = null;
   if (window.pinyinPro && typeof window.pinyinPro.pinyin === "function")
