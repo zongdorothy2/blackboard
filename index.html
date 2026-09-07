@@ -460,7 +460,7 @@ var PINYIN_TO_ZHUYIN = (function() {
     "ia":"ㄧㄚ","ie":"ㄧㄝ","iao":"ㄧㄠ","iu":"ㄧㄡ","iou":"ㄧㄡ",
     "ian":"ㄧㄢ","in":"ㄧㄣ","iang":"ㄧㄤ","ing":"ㄧㄥ",
     "ua":"ㄨㄚ","uo":"ㄨㄛ","uai":"ㄨㄞ","ui":"ㄨㄟ","uei":"ㄨㄟ",
-    "uan":"ㄨㄢ","un":"ㄨㄣ","uen":"ㄨㄣ","uang":"ㄨㄤ","ong":"ㄨㄥ",
+    "uan":"ㄨㄢ","un":"ㄨㄣ","uen":"ㄨㄣ","uang":"ㄨㄤ","ong":"ㄨㄥ","ueng":"ㄨㄥ",
     "ve":"ㄩㄝ","ue":"ㄩㄝ",
     "van":"ㄩㄢ","vn":"ㄩㄣ","iong":"ㄩㄥ"
   };
@@ -478,7 +478,7 @@ var PINYIN_TO_ZHUYIN = (function() {
       plain = py.slice(0, -1);
     }
 
-    // 拼音特殊規則校正（精準保留 ㄧ 介音）
+    // 拼音特殊規則校正（精準修正 weng -> ㄨㄥ、介音 ㄧ 保持）
     if      (plain === "yi")   plain = "i";
     else if (plain === "wu")   plain = "u";
     else if (plain === "yu")   plain = "v";
@@ -488,6 +488,7 @@ var PINYIN_TO_ZHUYIN = (function() {
     else if (plain === "yue")  plain = "ve";
     else if (plain === "yuan") plain = "van";
     else if (plain === "yong") plain = "iong";
+    else if (plain === "weng") plain = "ueng";
     else if (plain === "ya")   plain = "ia";
     else if (plain === "ye")   plain = "ie";
     else if (plain === "yao")  plain = "iao";
@@ -497,8 +498,7 @@ var PINYIN_TO_ZHUYIN = (function() {
     else if (plain.charAt(0) === "y") {
       plain = "i" + plain.slice(1);
     } else if (plain.charAt(0) === "w") {
-      plain = plain.slice(1);
-      if (plain.charAt(0) !== "u") plain = "u" + plain;
+      plain = "u" + plain.slice(1);
     }
 
     var initial = "", fin = plain;
@@ -535,7 +535,7 @@ var PINYIN_TO_ZHUYIN = (function() {
   return { convert: convert };
 })();
 
-// 完整常用字辭庫補全，特別確保「衣、一、以、已」等單一 ㄧ 聲調字精準無誤
+// 完整常用字辭庫補全（已將「暫」設為 ㄓㄢˋ）
 var COMMON_ZHUYIN = {
   "一": "ㄧ", "二": "ㄦˋ", "三": "ㄙㄢ", "四": "ㄙˋ", "五": "ㄨˇ",
   "六": "ㄌㄧㄡˋ", "七": "ㄑㄧ", "八": "ㄅㄚ", "九": "ㄐㄧㄡˇ", "十": "ㄕˊ",
@@ -557,6 +557,8 @@ var COMMON_ZHUYIN = {
   "不": "ㄅㄨˋ", "有": "ㄧㄡˇ", "在": "ㄗㄞˋ", "和": "ㄏㄜˊ",
   "老": "ㄌㄠˇ", "師": "ㄕ", "同": "ㄊㄨㄥˊ", 
   "牙": "ㄧㄚˊ", "齒": "ㄔˇ", "葉": "ㄧㄝˋ", "子": "ㄗˇ",
+  "富": "ㄈㄨˋ", "翁": "ㄨㄥ", "水": "ㄕㄨㄟˇ", "甕": "ㄨㄥˋ",
+  "暫": "ㄓㄢˋ", "微": "ㄨㄟˊ", "穴": "ㄒㄩㄝˋ", "笑": "ㄒㄧㄠˋ",
   "請": "ㄑㄧㄥˇ", "帶": "ㄉㄞˋ", "交": "ㄐㄧㄠ", "來": "ㄌㄞˊ"
 };
 
@@ -875,7 +877,7 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
       }
     }
 
-    // 方案一：高精準度 1px 漸層置中
+    // 高精準度 1px 漸層置中
     var gridBackground = 'linear-gradient(to right, transparent calc(50% - 0.5px), ' + gridGuide + ' calc(50% - 0.5px), ' + gridGuide + ' calc(50% + 0.5px), transparent calc(50% + 0.5px)), '
                        + 'linear-gradient(to bottom, transparent calc(50% - 0.5px), ' + gridGuide + ' calc(50% - 0.5px), ' + gridGuide + ' calc(50% + 0.5px), transparent calc(50% + 0.5px))';
 
@@ -902,13 +904,8 @@ var buildPracticeBook = function(hw, gridCm, zyWidthCm, fsMult, zyScale, zySpaci
       var ch = r < colChars.length ? colChars[r] : "";
       var zy = "";
       if (ch) {
-        var baseZy = (overrides && overrides[ch] !== undefined) ? overrides[ch] : getZhuyinForChar(ch);
-        if (r > 0 && ch === colChars[r - 1]) {
-          var p = parseZhuyin(baseZy);
-          zy = "˙" + p.chars.join("");
-        } else {
-          zy = baseZy;
-        }
+        // 修正：生字練習單保持原本調號，不隨機變輕聲
+        zy = (overrides && overrides[ch] !== undefined) ? overrides[ch] : getZhuyinForChar(ch);
       }
       cellsHTML.push(makePracticeCell(ch, zy));
     }
